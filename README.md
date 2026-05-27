@@ -1,53 +1,23 @@
+전체: 317580 행
+TG113 행수: 6833
 
-import pandas as pd
-df = pd.read_csv('data/raw_daily/202605/fdc_with_3340_20260526.csv', encoding='utf-8-sig', low_memory=False)
-# 컬럼명 소문자 통일
-df.columns = df.columns.str.lower()
-print('전체:', len(df), '행')
+current_event 분포: {'BODY': np.int64(4721), 'COOL': np.int64(392), 'DIP': np.int64(365), 'HPG': np.int64(349), 'TAIL': np.int64(289), 'MELT': np.int64(281), 'SHOULDER': np.int64(219), 'NECK': np.int64(103), 'STAB': np.int64(74), 'PUMPDOWN': np.int64(40)}
+ingot_status 분포: {'F/S': np.int64(6833)}
+attempt 분포: {1.0: np.int64(6833)}
+max_attempt 분포: {1.0: np.int64(6833)}
+customer_grp_2: {'Smart_SK hynix/GF/CXMT 440': np.int64(6833)}
+length 범위: [0, 2229]
 
-# 문제의 grower 만
-target = 'TG100' # ← 여기 grower 이름 넣기
-sub = df[df['grower'] == target]
-print(f'{target} 행수:', len(sub))
+4조건 통과 후 행수: 4721
 
-if len(sub) > 0:
-    print(f'\ncurrent_event 분포: {dict(sub["current_event"].value_counts())}')
-    print(f'ingot_status 분포: {dict(sub["ingot_status"].value_counts())}')
-    print(f'attempt 분포: {dict(sub["attempt"].value_counts())}')
-    print(f'max_attempt 분포: {dict(sub["max_attempt"].value_counts())}')
-    print(f'customer_grp_2: {dict(sub["customer_grp_2"].value_counts())}')
-    print(f'length 범위: [{sub["length"].min():.0f}, {sub["length"].max():.0f}]')
+전체: 317580 행
+TG100 행수: 7635
 
-    # 4가지 필터 적용 결과
-    f = sub[(sub['current_event'] == 'BODY') &
-            (sub['ingot_status'] == 'F/S') &
-            (sub['attempt'] == 1) &
-            (sub['attempt'] == sub['max_attempt'])]
-    print(f'\n4조건 통과 후 행수: {len(f)}')
+current_event 분포: {'BODY': np.int64(4970), 'DIP': np.int64(734), 'COOL': np.int64(392), 'HPG': np.int64(355), 'TAIL': np.int64(310), 'MELT': np.int64(282), 'SHOULDER': np.int64(182), 'STAB': np.int64(148), 'NECK': np.int64(117), 'MANUAL': np.int64(106), 'PUMPDOWN': np.int64(39)}
+ingot_status 분포: {'F/S': np.int64(6254), 'REWORK': np.int64(1381)}
+attempt 분포: {2.0: np.int64(6254), 1.0: np.int64(1381)}
+max_attempt 분포: {2.0: np.int64(7635)}
+customer_grp_2: {'Smart_SK hynix/GF/CXMT 440': np.int64(7635)}
+length 범위: [0, 2349]
 
-
-import pandas as pd
-df = pd.read_csv('data/raw_daily/202605/fdc_with_3340_20260526.csv', encoding='utf-8-sig', low_memory=False)
-# 컬럼명 소문자 통일
-df.columns = df.columns.str.lower()
-print('전체:', len(df), '행')
-
-# 문제의 grower 만
-target = 'TG113' # ← 여기 grower 이름 넣기
-sub = df[df['grower'] == target]
-print(f'{target} 행수:', len(sub))
-
-if len(sub) > 0:
-    print(f'\ncurrent_event 분포: {dict(sub["current_event"].value_counts())}')
-    print(f'ingot_status 분포: {dict(sub["ingot_status"].value_counts())}')
-    print(f'attempt 분포: {dict(sub["attempt"].value_counts())}')
-    print(f'max_attempt 분포: {dict(sub["max_attempt"].value_counts())}')
-    print(f'customer_grp_2: {dict(sub["customer_grp_2"].value_counts())}')
-    print(f'length 범위: [{sub["length"].min():.0f}, {sub["length"].max():.0f}]')
-
-    # 4가지 필터 적용 결과
-    f = sub[(sub['current_event'] == 'BODY') &
-            (sub['ingot_status'] == 'F/S') &
-            (sub['attempt'] == 1) &
-            (sub['attempt'] == sub['max_attempt'])]
-    print(f'\n4조건 통과 후 행수: {len(f)}')
+4조건 통과 후 행수: 0
