@@ -1,9 +1,53 @@
-[ERROR] preprocess_ingot 후 빈 DataFrame
- 진단:
- - 원본 행 수: 4955
- - length 범위 필터: [150, 2100]
- - current_event 필터: 'BODY'
- - position_reference: [270, 390, 590, 790, 990, 1190, 1390, 1590, 1790, 1990]
- - 원본 length 범위: [1, 2349]
- - 원본 current_event: {'BODY': 4955}
- 원인: 잉곳 데이터가 학습 범위 / BODY 이벤트 / 기준 위치와 매칭 안 됨
+
+import pandas as pd
+df = pd.read_csv('data/raw_daily/202605/fdc_with_3340_20260526.csv', encoding='utf-8-sig', low_memory=False)
+# 컬럼명 소문자 통일
+df.columns = df.columns.str.lower()
+print('전체:', len(df), '행')
+
+# 문제의 grower 만
+target = 'TG100' # ← 여기 grower 이름 넣기
+sub = df[df['grower'] == target]
+print(f'{target} 행수:', len(sub))
+
+if len(sub) > 0:
+    print(f'\ncurrent_event 분포: {dict(sub["current_event"].value_counts())}')
+    print(f'ingot_status 분포: {dict(sub["ingot_status"].value_counts())}')
+    print(f'attempt 분포: {dict(sub["attempt"].value_counts())}')
+    print(f'max_attempt 분포: {dict(sub["max_attempt"].value_counts())}')
+    print(f'customer_grp_2: {dict(sub["customer_grp_2"].value_counts())}')
+    print(f'length 범위: [{sub["length"].min():.0f}, {sub["length"].max():.0f}]')
+
+    # 4가지 필터 적용 결과
+    f = sub[(sub['current_event'] == 'BODY') &
+            (sub['ingot_status'] == 'F/S') &
+            (sub['attempt'] == 1) &
+            (sub['attempt'] == sub['max_attempt'])]
+    print(f'\n4조건 통과 후 행수: {len(f)}')
+
+
+import pandas as pd
+df = pd.read_csv('data/raw_daily/202605/fdc_with_3340_20260526.csv', encoding='utf-8-sig', low_memory=False)
+# 컬럼명 소문자 통일
+df.columns = df.columns.str.lower()
+print('전체:', len(df), '행')
+
+# 문제의 grower 만
+target = 'TG113' # ← 여기 grower 이름 넣기
+sub = df[df['grower'] == target]
+print(f'{target} 행수:', len(sub))
+
+if len(sub) > 0:
+    print(f'\ncurrent_event 분포: {dict(sub["current_event"].value_counts())}')
+    print(f'ingot_status 분포: {dict(sub["ingot_status"].value_counts())}')
+    print(f'attempt 분포: {dict(sub["attempt"].value_counts())}')
+    print(f'max_attempt 분포: {dict(sub["max_attempt"].value_counts())}')
+    print(f'customer_grp_2: {dict(sub["customer_grp_2"].value_counts())}')
+    print(f'length 범위: [{sub["length"].min():.0f}, {sub["length"].max():.0f}]')
+
+    # 4가지 필터 적용 결과
+    f = sub[(sub['current_event'] == 'BODY') &
+            (sub['ingot_status'] == 'F/S') &
+            (sub['attempt'] == 1) &
+            (sub['attempt'] == sub['max_attempt'])]
+    print(f'\n4조건 통과 후 행수: {len(f)}')
