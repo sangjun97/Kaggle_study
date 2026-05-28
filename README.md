@@ -1,23 +1,38 @@
-전체: 317580 행
-TG100 행수: 7635
+(venv_new) PS D:\python\CUH\전달용> python .\scripts\release\run_apc.py --lot 6H823
+D:\python\virtualenv\venv_new\Lib\site-packages\requests\__init__.py:113: RequestsDependencyWarning: urllib3 (2.6.3) or chardet (7.4.3)/charset_normalizer (2.1.1) doesn't match a supported version!
+  warnings.warn(
+📋 release_params: 10 positions, target=80.0
 
-current_event 분포: {'BODY': np.int64(4970), 'DIP': np.int64(734), 'COOL': np.int64(392), 'HPG': np.int64(355), 'TAIL': np.int64(310), 'MELT': np.int64(282), 'SHOULDER': np.int64(182), 'STAB': np.int64(148), 'NECK': np.int64(117), 'MANUAL': np.int64(106), 'PUMPDOWN': np.int64(39)}
-ingot_status 분포: {'F/S': np.int64(6254), 'REWORK': np.int64(1381)}
-attempt 분포: {2.0: np.int64(6254), 1.0: np.int64(1381)}
-max_attempt 분포: {2.0: np.int64(7635)}
-customer_grp_2: {'Smart_SK hynix/GF/CXMT 440': np.int64(7635)}
-length 범위: [0, 2349]
-
-4조건 통과 후 행수: 0
-전체 행수: 317580
- cuh_bsw_center: NaN=317580/317580 (100.0%), empty=0
- cuh_bsw_edge: NaN=317580/317580 (100.0%), empty=0
- ftir_oi_center: NaN=317580/317580 (100.0%), empty=0
- fpd_score: NaN=317580/317580 (100.0%), empty=0
- ldp_score: NaN=317580/317580 (100.0%), empty=0
- fpd_ar: NaN=317580/317580 (100.0%), empty=0
- ldp_ar: NaN=317580/317580 (100.0%), empty=0
-
- sample lot: 6D225
-FDC length 값: [np.float64(0.0), np.float64(0.6), np.float64(1.0), np.float64(2.0), np.float64(3.0), np.float64(4.0), np.float64(4.6), np.float64(5.0), np.float64(6.0), np.float64(7.0)] ... (총 1768 개)
-3340 order_pos 값: []
+============================================================
+📡 Lot 기반 데이터 수집: target=6H823, n_runs=5
+============================================================
+ [PRES] 6H823 FDC+3340 조회...
+ → 6,697 행
+Traceback (most recent call last):
+  File "D:\python\CUH\전달용\scripts\release\run_apc.py", line 631, in <module>
+    main()
+  File "D:\python\CUH\전달용\scripts\release\run_apc.py", line 168, in main
+    _run_lot_mode(args, paths, pcfg, model_cfg,
+  File "D:\python\CUH\전달용\scripts\release\run_apc.py", line 240, in _run_lot_mode
+    collected = collect_lot_runs(
+                ^^^^^^^^^^^^^^^^^
+  File "D:\python\CUH\전달용\src\release\lot_fetch.py", line 155, in collect_lot_runs
+    candidates = fetch_prev_lot_candidates(target_lot, prefix_len=prefix_len)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\python\CUH\전달용\src\release\lot_fetch.py", line 67, in fetch_prev_lot_candidates
+    df_prev = fetch_df(q_prev)
+              ^^^^^^^^^^^^^^^^
+  File "D:\python\CUH\전달용\scripts\fetch\fetch_from_db.py", line 101, in fetch_df
+    cur.execute(query)
+  File "D:\python\virtualenv\venv_new\Lib\site-packages\trino\dbapi.py", line 640, in execute
+    self._iterator = iter(self._query.execute())
+                          ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\python\virtualenv\venv_new\Lib\site-packages\trino\client.py", line 909, in execute
+    self._result.rows += self.fetch()
+                         ^^^^^^^^^^^^
+  File "D:\python\virtualenv\venv_new\Lib\site-packages\trino\client.py", line 929, in fetch
+    status = self._request.process(response)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\python\virtualenv\venv_new\Lib\site-packages\trino\client.py", line 698, in process
+    raise self._process_error(response["error"], response.get("id"))
+trino.exceptions.TrinoUserError: TrinoUserError(type=USER_ERROR, name=TYPE_MISMATCH, message="line 5:18: Cannot apply operator: decimal(20,0) < varchar(16)", query_id=20260528_090531_20764_tugj6)
