@@ -1,24 +1,23 @@
-===========================================================
-📊 처리 요약 (incremental 모드)
-============================================================
- 잉곳 처리/갱신: 0 개
- empty (신규): 6 개
- empty 사유별: {'validation_failed': 6}
- empty 샘플 (최대 10):
- TG121/20260527: reason=validation_failed, raw=4753, after_valid=0, after_length=0, length=[1.0, 2229.0], cuh_nan=100.00%
- TG129/20260527: reason=validation_failed, raw=4719, after_valid=0, after_length=0, length=[1.0, 2229.0], cuh_nan=100.00%
- TG22/20260527: reason=validation_failed, raw=4892, after_valid=0, after_length=0, length=[1.0, 2349.0], cuh_nan=100.00%
- TG30/20260527: reason=validation_failed, raw=5044, after_valid=0, after_length=0, length=[1.0, 2349.0], cuh_nan=100.00%
- TG91/20260527: reason=validation_failed, raw=5017, after_valid=0, after_length=0, length=[1.0, 2349.0], cuh_nan=100.00%
- TG99/20260527: reason=validation_failed, raw=4905, after_valid=0, after_length=0, length=[1.0, 2349.0], cuh_nan=100.00%
- no summary row: 0 개
- customer 필터 탈락: 16 개
- 탈락 customer_grp_2 분포: {'PW_400': 6, 'Multi_Kioxia Double': 1, 'Smart_SEC F3 440': 2, 'Zenith 1.0_SK hynix/GF/CXMT 440': 2, 'Zenith 1.0_Multi_Kioxia Double': 1, 'EPI_440 (일반)': 2, 'Smart_SEC FV3/FV4/Kioxia 440': 2}
- raw 파일 누락: 0 개
- 예외 발생: 0 개
- empty (캐시 skip): 0 개
- empty 누적: 506 개
- grower.csv 갱신: 0 개
- grower.csv 유지: 155 개
-📝 완료 마커: data\grower\_DONE_02_grower_data.txt
-🎉 전체 처리 완료
+전체: 317580 행
+TG100 행수: 7635
+
+current_event 분포: {'BODY': np.int64(4970), 'DIP': np.int64(734), 'COOL': np.int64(392), 'HPG': np.int64(355), 'TAIL': np.int64(310), 'MELT': np.int64(282), 'SHOULDER': np.int64(182), 'STAB': np.int64(148), 'NECK': np.int64(117), 'MANUAL': np.int64(106), 'PUMPDOWN': np.int64(39)}
+ingot_status 분포: {'F/S': np.int64(6254), 'REWORK': np.int64(1381)}
+attempt 분포: {2.0: np.int64(6254), 1.0: np.int64(1381)}
+max_attempt 분포: {2.0: np.int64(7635)}
+customer_grp_2: {'Smart_SK hynix/GF/CXMT 440': np.int64(7635)}
+length 범위: [0, 2349]
+
+4조건 통과 후 행수: 0
+전체 행수: 317580
+ cuh_bsw_center: NaN=317580/317580 (100.0%), empty=0
+ cuh_bsw_edge: NaN=317580/317580 (100.0%), empty=0
+ ftir_oi_center: NaN=317580/317580 (100.0%), empty=0
+ fpd_score: NaN=317580/317580 (100.0%), empty=0
+ ldp_score: NaN=317580/317580 (100.0%), empty=0
+ fpd_ar: NaN=317580/317580 (100.0%), empty=0
+ ldp_ar: NaN=317580/317580 (100.0%), empty=0
+
+ sample lot: 6D225
+FDC length 값: [np.float64(0.0), np.float64(0.6), np.float64(1.0), np.float64(2.0), np.float64(3.0), np.float64(4.0), np.float64(4.6), np.float64(5.0), np.float64(6.0), np.float64(7.0)] ... (총 1768 개)
+3340 order_pos 값: []
