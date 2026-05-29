@@ -3,81 +3,31 @@ D:\python\virtualenv\venv_new\Lib\site-packages\requests\__init__.py:113: Reques
   warnings.warn(
 
 ======================================================================
-[A. FPD 의 모든 PARAM_PRMPT_NM 분포]
-SELECT a."PARAM_PRMPT_NM", COUNT(*) AS cnt
+[1. SAMP_ID 안에 lot 이 포함된 모든 행 (PARAM_NM 무관)]
+SELECT DISTINCT a."SAMP_ID", a."PARAM_NM", a."PARAM_SET_ID"
         FROM oracle.oggmgr.TN_SAMP_PARAM a
-        WHERE UPPER(a."PARAM_NM") = 'FPD'
-          AND a."SAMP_ID" LIKE '6B527%'
-        GROUP BY a."PARAM_PRMPT_NM"
-        ORDER BY cnt DESC
+        WHERE a."SAMP_ID" LIKE '%6B527%'
+          AND ROWNUM <= 30
 ----------------------------------------------------------------------
-행수: 0
-
-======================================================================
-[B. FPD MAX 류 PARAM_VAL 샘플]
-SELECT a."SAMP_ID", a."PARAM_PRMPT_NM", a."PARAM_VAL"
-        FROM oracle.oggmgr.TN_SAMP_PARAM a
-        WHERE UPPER(a."PARAM_NM") = 'FPD'
-          AND UPPER(a."PARAM_PRMPT_NM") LIKE '%MAX%'
-          AND a."SAMP_ID" LIKE '6B527%'
-        ORDER BY a."SAMP_ID"
-----------------------------------------------------------------------
-행수: 0
-
-======================================================================
-[C. LDP 의 PARAM_PRMPT_NM 분포]
-SELECT a."PARAM_PRMPT_NM", COUNT(*) AS cnt
-        FROM oracle.oggmgr.TN_SAMP_PARAM a
-        WHERE UPPER(a."PARAM_NM") = 'LDP'
-          AND a."SAMP_ID" LIKE '6B527%'
-        GROUP BY a."PARAM_PRMPT_NM"
-        ORDER BY cnt DESC
-----------------------------------------------------------------------
-행수: 0
-
-======================================================================
-[D. TN_SAMP_MATCH (position) SAMP_ID 개수]
-SELECT a."SAMP_ID", a."INGT_LOT_ID", a."BLCK_LOT_ID",
-               a."ORDER_PSTN_VAL", a."SAMP_RLTY_PSTN_VAL", a."SAMP_USG_CD"
-        FROM oracle.oggmgr.TN_SAMP_MATCH a
-        WHERE a."INGT_LOT_ID" LIKE '6B527%'
-          AND a."SAMP_USG_CD" = 'RESN'
-        ORDER BY a."SAMP_ID"
-----------------------------------------------------------------------
-행수: 0
-
-======================================================================
-[E. FPD ∩ LDP 모두 가진 SAMP_ID]
-SELECT DISTINCT fpd."SAMP_ID"
-        FROM (
-          SELECT DISTINCT a."SAMP_ID"
-          FROM oracle.oggmgr.TN_SAMP_PARAM a
-          WHERE UPPER(a."PARAM_NM") = 'FPD'
-            AND UPPER(a."PARAM_PRMPT_NM") LIKE '%MAX%1%'
-            AND a."SAMP_ID" LIKE '6B527%'
-            AND TRIM(a."PARAM_VAL") IS NOT NULL
-            AND TRIM(a."PARAM_VAL") != ''
-        ) fpd
-        INNER JOIN (
-          SELECT DISTINCT a."SAMP_ID"
-          FROM oracle.oggmgr.TN_SAMP_PARAM a
-          WHERE UPPER(a."PARAM_NM") = 'LDP'
-            AND a."SAMP_ID" LIKE '6B527%'
-            AND TRIM(a."PARAM_VAL") IS NOT NULL
-            AND TRIM(a."PARAM_VAL") != ''
-        ) ldp ON fpd."SAMP_ID" = ldp."SAMP_ID"
-        ORDER BY fpd."SAMP_ID"
-----------------------------------------------------------------------
-행수: 0
-
-======================================================================
-[F. SAMP_ID 첫 5자리 vs 전체 길이]
-SELECT a."SAMP_ID", LENGTH(a."SAMP_ID") AS samp_len,
-               SUBSTR(a."SAMP_ID", 1, 5) AS prefix5
-        FROM oracle.oggmgr.TN_SAMP_PARAM a
-        WHERE UPPER(a."PARAM_NM") = 'FPD'
-          AND a."SAMP_ID" LIKE '6B527%'
-        GROUP BY a."SAMP_ID", LENGTH(a."SAMP_ID"), SUBSTR(a."SAMP_ID", 1, 5)
-        ORDER BY a."SAMP_ID"
-----------------------------------------------------------------------
-행수: 0
+Traceback (most recent call last):
+  File "D:\python\CUH\전달용\scripts\diag_fpd.py", line 77, in <module>
+    main()
+  File "D:\python\CUH\전달용\scripts\diag_fpd.py", line 38, in main
+    run("1. SAMP_ID 안에 lot 이 포함된 모든 행 (PARAM_NM 무관)",
+  File "D:\python\CUH\전달용\scripts\diag_fpd.py", line 23, in run
+    df = fetch_df(query)
+         ^^^^^^^^^^^^^^^
+  File "D:\python\CUH\전달용\scripts\fetch\fetch_from_db.py", line 93, in fetch_df
+    cur.execute(query)
+  File "D:\python\virtualenv\venv_new\Lib\site-packages\trino\dbapi.py", line 640, in execute
+    self._iterator = iter(self._query.execute())
+                          ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\python\virtualenv\venv_new\Lib\site-packages\trino\client.py", line 909, in execute
+    self._result.rows += self.fetch()
+                         ^^^^^^^^^^^^
+  File "D:\python\virtualenv\venv_new\Lib\site-packages\trino\client.py", line 929, in fetch
+    status = self._request.process(response)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\python\virtualenv\venv_new\Lib\site-packages\trino\client.py", line 698, in process
+    raise self._process_error(response["error"], response.get("id"))
+trino.exceptions.TrinoUserError: TrinoUserError(type=USER_ERROR, name=COLUMN_NOT_FOUND, message="line 5:15: Column 'rownum' cannot be resolved", query_id=20260529_015830_05506_tugj6)
