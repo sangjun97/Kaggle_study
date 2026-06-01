@@ -1,86 +1,62 @@
-사용자 SQL 그대로 실행
-입력 lot: ['6B523']
-----------------------------------------------------------------------
+======================================================================
+# APC by lot: 6B527
+======================================================================
+🎯 target lot 조회: 6B527
+ target 4698행, USAGE 컬럼 9개, gr_out=20260528, customer=Smart_SK hynix/GF/CXMT 440
+🔎 lot 시퀀스 조회: prefixes=['6B5', '5B5']
+ 이전 lot 후보 89개 (최신순)
+ ✅ 6B526: 수집 (1/5, 6947행)
+ ✅ 6B525: 수집 (2/5, 6672행)
+ ✅ 6B524: 수집 (3/5, 8123행)
+ ✅ 6B523: 수집 (4/5, 7102행)
+ ✅ 6B522: 수집 (5/5, 6630행)
+ skip 통계: FDC없음=0, cuh없음=0, gr_out=0, customer=0, USAGE탈락=0
+ grower DF 구성: 51행, 잉곳 5개 (요청 run 5개)
 
-행수: 26
+📊 컨텍스트: grower=TG75, prev 5/5 run (lots=['6B526', '6B525', '6B524', '6B523', '6B522']), target 4698행
+  PREV 후보 수집: 6 개 (검사 6 개, skip 0 개)
 
-fpd_ar 분포: {'A': np.int64(26)}
-cuh_bsw_center 유효: 23
-ftir_oi_center 유효: 23
+=== PREV 후보 (blend=5개, mode=weighted) ===
+ rank lot_number   gr_out  usage                role
+    1      6B526 20260525      1 blend + ps_set_prev
+    2      6B525 20260520      2               blend
+    3      6B524 20260514      3               blend
+    4      6B524 20260514      3               blend
+    5      6B523 20260509      4               blend
+  📐 입력 X 값 vs clip 범위:
+       pull_speed_t100_delta: [-0.0012 ~ 0.0011] (clip: [-0.0070 ~ 0.0070], 밖 0/4건)
+       ftir_oi_center_delta: [nan ~ nan] (clip: [-0.8000 ~ 0.8000], 밖 0/0건)
+       dia_l50_delta: [-0.2168 ~ -0.0570] (clip: [-3.0000 ~ 3.0000], 밖 0/4건)
+ ⚠️ rank=2: Δ 테이블 비어있음 → skip
+  📐 입력 X 값 vs clip 범위:
+       pull_speed_t100_delta: [-0.0023 ~ 0.0032] (clip: [-0.0070 ~ 0.0070], 밖 0/3건)
+       ftir_oi_center_delta: [nan ~ nan] (clip: [-0.8000 ~ 0.8000], 밖 0/0건)
+       dia_l50_delta: [0.4673 ~ 0.8942] (clip: [-3.0000 ~ 3.0000], 밖 0/3건)
+ ⚠️ rank=4: Δ 테이블 비어있음 → skip
+  📐 입력 X 값 vs clip 범위:
+       pull_speed_t100_delta: [-0.0009 ~ 0.0025] (clip: [-0.0070 ~ 0.0070], 밖 0/3건)
+       ftir_oi_center_delta: [nan ~ nan] (clip: [-0.8000 ~ 0.8000], 밖 0/0건)
+       dia_l50_delta: [-0.4639 ~ -0.0128] (clip: [-3.0000 ~ 3.0000], 밖 0/3건)
 
-처음 15행:
-   samp_id iot_number order_pos cuh_bsw_center ftir_oi_center fpd_ar fpd_score
-6B52302001      6B523        20           None         13.094      A     0E-10
-6B52302067      6B523        90           None         13.101      A     0E-10
-6B52302127      6B523       150             45          11.06      A     0E-10
-6B52302127      6B523       150             45          11.06      A     0E-10
-6B52302129      6B523       152             45           None      A     0E-10
-6B52302146      6B523       170             45           None      A     0E-10
-6B52302183      6B523       207             45           None      A     0E-10
-6B52302245      6B523       270             30          10.83      A     0E-10
-6B52302357      6B523       390             70         10.845      A     0E-10
-6B52339000      6B523       390             70         10.845      A     0E-10
-6B52339176      6B523       570             80         11.167      A     0E-10
-6B52339353      6B523       760             80         11.236      A     0E-10
-6B52376001      6B523       760             95         11.095      A     0E-10
-6B52376176      6B523       940            100         11.265      A     0E-10
-6B52376999      6B523      1120             85         11.031      A     0E-10
+=== APC 추천 (Zero baseline, target=80.0) ===
+grower: TG75
+pres_lot: 6B527
+prev (K=3 weighted):
+ rank lot_number   gr_out                role
+    1      6B526 20260525 blend + ps_set_prev
+    2      6B525 20260520               blend
+    3      6B524 20260514               blend
+    4      6B524 20260514               blend
+    5      6B523 20260509               blend
 
-사용자 SQL 그대로 실행                                                                                                                                                                                           
-입력 lot: ['6B520', '6B521', '6B522', '6B523']                                                                                                                                                                   
-----------------------------------------------------------------------                                                                                                                                           
-                                                                                                                                                                                                                 
-행수: 106                                                                                                                                                                                                        
-                                                                                                                                                                                                                 
-fpd_ar 분포: {'A': np.int64(96), None: np.int64(10)}
-cuh_bsw_center 유효: 86
-ftir_oi_center 유효: 96
+결과:
+ position  ps_set_prev  ps_delta_zero  ps_correction_value  ps_set_proposed
+      270      0.45045        0.00129              0.00000          0.45173
+      390      0.46218       -0.00214              0.00000          0.46004
+      590      0.47164       -0.00371              0.00000          0.46793
+      790      0.47669       -0.00500              0.00000          0.47169
+      990      0.47838       -0.00200              0.00000          0.47638
+     1190      0.48106       -0.00200              0.00000          0.47906
+     1390      0.48469        0.00000              0.00000          0.48469
 
-처음 15행:
-   samp_id iot_number order_pos cuh_bsw_center ftir_oi_center fpd_ar fpd_score
-6B52002001      6B520        20           None         16.424      A     0E-10
-6B52002067      6B520        90           None         12.968      A     0E-10
-6B52002127      6B520       150           None         11.112      A     0E-10
-6B52002128      6B520       151           None         10.991   None      None
-6B52002245      6B520       270           None         11.016   None      None
-6B52002355      6B520       390           None         11.168   None      None
-6B52039001      6B520       390             80         11.189      A     0E-10
-6B52039176      6B520       570             80         11.063      A     0E-10
-6B52039999      6B520       760             85         11.175      A     0E-10
-6B52076001      6B520       760             85         11.175      A     0E-10
-6B52076176      6B520       940             70         11.299      A     0E-10
-6B52076999      6B520      1120            100         11.022      A     0E-10
-6B520B2001      6B520      1120            100         11.022      A     0E-10
-6B520B2176      6B520      1300             70         11.007      A     0E-10
-6B520B2346      6B520      1480             55         10.824      A     0E-10
-
->> import pandas as pd
->> df = pd.read_csv('D:/python/CUH/전달용/fdc_3340_lot_basis_20260529_105443.csv', encoding='utf-8-sig', low_memory=False)
->> df.columns = df.columns.str.lower()
->> # fpd_ar 가 채워진 행 (6B520)
->> sub = df[(df['lot_number']=='6B520') & df['fpd_ar'].notna()]
->> print(f'행수: {len(sub)}')
->> print()
->> print('컬럼 목록:', list(df.columns))
->> print()
->> print('첫 10행 (주요 컬럼):')
->> cols = ['lot_number', 'length', 'samp_id', 'iot_number', 'order_pos', 'fpd_ar', 'fpd_score', 'cuh_bsw_center']
->> cols = [c for c in cols if c in sub.columns]
->> print(sub[cols].head(10).to_string())
->> "
-행수: 55
-
-컬럼 목록: ['gr_out', 'area', 'grower', 'lot_number', 'runtime_event', 'runtime_all', 'work_time', 'mscode', 'customer_grp_1', 'customer_grp_2', 'cust_nm', 'current_event', 'attempt', 'max_attempt', 'ingot_status', 'st_loss_pos', 'st_loss_label', 'length', 'dia', 'adc_filter', 'adc_position_nor', 'ssrp_sho_dia', 'ssrp_sho_dia_error', 'a_chamber_flow', 'b_chamber_flow', 'a_chamber_temp', 'b_chamber_temp', 'water_jacket_1_flow', 'water_jacket_2_flow', 'water_jacket_1_temp', 'water_jacket_2_temp', 'ar_flow', 'ar_gas_no2', 'a_chamber_pressure', 'throttle_valve_open', 'actual_pull_speed', 'actual_pull_speed_gap', 'actual_clr', 'crucible_lift', 'crucible_position', 'crucible_rotation', 'seed_position', 'seed_rotation', 'melt_gap', 'melt_gap_delta', 'melt_temp', 'atc_actual_value', 'body_profile', 'body_profile_gap', 'heater_power', 'heater_resistance', 'st_heater_power', 'actual_magnet_intensity', 'all_cleaning', 'exhaust_line_cleaning', 'crucible_2d', 'heater_cap', 'nop_inner', 'nop_outer_lower', 'nop_outer_upper', 'nop_shield', 'nop_tube', 'side_heater', 'st_heater', 'top_ring', 'uls_heat_cap', 'upper_ring', 'upper_tube_l', 'upper_tube_u', 'frs_oi', 'frs_eqp_id', 'pull_speed', 'magnet_position', 'ar_gas_no3', 'hsys_upd_dtm', 'pt_d', 'renamed_grower', 'renamed_lot_number', 'samp_id', 'iot_number', 'blck_lot_id', 'order_pstn_val', 'samp_rlty_pstn_val', 'block_pos', 'actual_pos', 'order_pos', 'ftir_oi_center', 'ftir_oi_edge1_1', 'ftir_oi_edge1_2', 'ftir_oi_edge1_3', 'ftir_oi_edge1_4', 'cuh_bp_center', 'cuh_bp_edge', 'cuh_bp_all', 'cuh_bsw_center', 'cuh_bsw_edge', 'cuh_bsw_all', 'fpd_score', 'ldp_score', 'b_band_value', 'fpd_ar', 'ldp_ar', 'has_b_band']
-
-첫 10행 (주요 컬럼):
-      lot_number  length     samp_id iot_number  order_pos fpd_ar  fpd_score  cuh_bsw_center
-12443      6B520    20.0  6B52002001      6B520       20.0      A        0.0             NaN
-12524      6B520    90.0  6B52002067      6B520       90.0      A        0.0             NaN
-12525      6B520    90.0  6B52002067      6B520       90.0      A        0.0             NaN
-12591      6B520   150.0  6B52002127      6B520      150.0      A        0.0             NaN
-12592      6B520   150.0  6B52002127      6B520      150.0      A        0.0             NaN
-12621      6B520    20.0  6B52002001      6B520       20.0      A        0.0             NaN
-12622      6B520    20.0  6B52002001      6B520       20.0      A        0.0             NaN
-12739      6B520    90.0  6B52002067      6B520       90.0      A        0.0             NaN
-12858      6B520   150.0  6B52002127      6B520      150.0      A        0.0             NaN
-12859      6B520   150.0  6B52002127      6B520      150.0      A        0.0             NaN
+✅ 저장: outputs\release_apc\6B527_apc_recommendation.csv
