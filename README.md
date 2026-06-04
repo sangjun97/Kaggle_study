@@ -1,108 +1,81 @@
-====================================================================================================
-🔍 3 모델 비교 평가
- SETS: ['model_v1_P7_pw7_t200', 'model_v1_T9_t200', 'model_v1_P8_pw8_t200', 'model_v1_P7_pw7']
- APC_CTRL: pull_speed_t200_delta
-====================================================================================================
-
-====================================================================================================
-📊 [Phase 1/3] Slope 비교 — APC_CTRL=pull_speed_t200_delta, GEN=GEN5
- 도메인 이상값: slope=20000, PS@CUH80=0.004
-====================================================================================================
-
- ✅ model_v1_P7_pw7_t200
- 평균 slope =     15382
- 평균 PS@CUH80 = +0.00520 (1.30× 도메인 이상값)
-
- ✅ model_v1_T9_t200
- 평균 slope =     15382
- 평균 PS@CUH80 = +0.00520 (1.30× 도메인 이상값)
-
- ✅ model_v1_P8_pw8_t200
- 평균 slope =     16008
- 평균 PS@CUH80 = +0.00500 (1.25× 도메인 이상값)
-
- 📌 위치별 PS@CUH80 비교 (도메인 이상값 = +0.00400):
-SET       model_v1_P7_pw7_t200  model_v1_P8_pw8_t200  model_v1_T9_t200
-position
-270                   +0.00508              +0.00488          +0.00508
-390                   +0.00508              +0.00488          +0.00508
-590                   +0.00511              +0.00491          +0.00511
-790                   +0.00511              +0.00491          +0.00511
-990                   +0.00519              +0.00499          +0.00519
-1190                  +0.00519              +0.00499          +0.00519
-1390                  +0.00525              +0.00505          +0.00525
-1590                  +0.00525              +0.00505          +0.00525
-1790                  +0.00537              +0.00517          +0.00537
-1990                  +0.00537              +0.00517          +0.00537
-
- 📌 위치별 slope 비교 (도메인 이상값 = 20000):
-SET       model_v1_P7_pw7_t200  model_v1_P8_pw8_t200  model_v1_T9_t200
-position
-270                      15737                 16385             15737
-390                      15737                 16385             15737
-590                      15658                 16295             15658
-790                      15658                 16295             15658
-990                      15400                 16026             15400
-1190                     15400                 16026             15400
-1390                     15232                 15846             15232
-1590                     15232                 15846             15232
-1790                     14885                 15488             14885
-1990                     14885                 15488             14885
-
-====================================================================================================
-📊 [Phase 1/3] Slope 비교 — APC_CTRL=pull_speed_t100_delta, GEN=GEN5
- 도메인 이상값: slope=20000, PS@CUH80=0.004
-====================================================================================================
-
- ✅ model_v1_P7_pw7
- 평균 slope =     14053
- 평균 PS@CUH80 = +0.00569 (1.42× 도메인 이상값)
-
- 📌 위치별 PS@CUH80 비교 (도메인 이상값 = +0.00400):
-SET       model_v1_P7_pw7
-position
-270              +0.00585
-390              +0.00585
-590              +0.00573
-790              +0.00573
-990              +0.00569
-1190             +0.00569
-1390             +0.00561
-1590             +0.00561
-1790             +0.00560
-1990             +0.00560
-
- 📌 위치별 slope 비교 (도메인 이상값 = 20000):
-SET       model_v1_P7_pw7
-position
-270                 13678
-390                 13678
-590                 13966
-790                 13966
-990                 14072
-1190                14072
-1390                14269
-1590                14269
-1790                14283
-1990                14283
-
-====================================================================================================
-📊 [Phase 2/3] Test MAE / R² 비교 — outputs/train/summary.csv
-====================================================================================================
-
- Test_MAE_Pred / R² (모든 GEN5/GEN4 실험 평균)
-                 SET  mean_mae  std_mae  mean_r2  n_exp
-     model_v1_P7_pw7    25.920    1.114    0.254     17
-model_v1_P7_pw7_t200    25.712    1.004    0.268     22
-model_v1_P8_pw8_t200    25.861    1.025    0.257     22
-    model_v1_T9_t200    25.712    1.004    0.268     22
-
- 📌 판정:
- △ model_v1_P7_pw7: MAE=25.920, R²=0.254, n_exp=17
- ✅ model_v1_P7_pw7_t200: MAE=25.712, R²=0.268, n_exp=22
- △ model_v1_P8_pw8_t200: MAE=25.861, R²=0.257, n_exp=22
- ✅ model_v1_T9_t200: MAE=25.712, R²=0.268, n_exp=22
-
-====================================================================================================
-✅ 비교 완료
-====================================================================================================
+인자명  설명  X인자/Y인자
+Wafer Id		
+DateTime		
+구분		Y인자
+AR TYPE		
+중복		
+MS CODE		
+User Lot Id		
+Lot Id		
+Raw Value		
+BLK_NO		
+SINGLE_NO		
+WAF_SEQ_NO		
+AR_FLAG		
+INPUT_DATETIME		
+INPUT_DATETIME_STR		
+Wafer Id		
+DateTime		
+구분	패턴 발생 여부	Y인자
+AR TYPE		
+중복		
+MS CODE		
+User Lot Id		
+Lot Id		
+Raw Value		
+BLK_NO		
+SINGLE_NO		
+WAF_SEQ_NO		
+AR_FLAG		
+INPUT_DATETIME		
+INPUT_DATETIME_STR		
+DSP(6100)일자		
+DSP(6100) 작업완료		
+DSP(6100)장비		
+DSP(6100)SUBLOT		
+DSPC(6200) 투입시작		
+DSP(6100) 작업완료(변환)		
+DSPC(6200) 투입시작(변환)		
+DSP~DSPC Leadtime(min)	DSP 완료 시간 ~ DSPC 투입 시간 Lead time	X인자
+DSP(6100)_LGV장비	DSP 작업 완료 후 DSPC 투입하기 위한 LGV호기	X인자
+LGV조치(FA)		
+불량률		
+CST단위Judge		
+측정일자		
+중복제거		
+FP(6500)일자		X인자
+FP(6500) 작업 완료		X인자
+PCS(6700) 투입 시작		X인자
+FP(6500)장비		X인자
+PCS(6700) 투입 완료		X인자
+PCS(6700)SUBLOT_ID	PCS Flow 기준 Sublot 정보	X인자
+PCS(6700)장비		X인자
+FP_bath	FP 완료 후 Bath ID	X인자
+FP_Pad Life	FP 작업진행 간 Pad Life	X인자
+FP_TA Life	FP 작업진행 간 TA Life	X인자
+FP(6500) 작업 완료(변환)		X인자
+PCS(6700) 투입 시작(변환)		X인자
+FP~PCS Lead time(min)	FP 완료 시간 ~ PCS 투입 시간 Lead time	X인자
+FP(6500)_CAR_ID	FP 작업 완료 후 Open CST ID	X인자
+FP(6500)_LGV 장비	FP 작업 완료 후 PCS 투입하기 위한 LGV호기	X인자
+FP(6500)_LGV 투입 시점	FP 작업 완료 후 LGV호기가 장비 투입 시간	X인자
+DSPC(6200)SUBLOT_ID	DSPC Flow 기준 Sublot 정보	X인자
+DSCP SC1-1 Temp	DSPC SC1-1 Bath 온도	X인자
+DSCP SC1-2 Temp	DSPC SC1-2 Bath 온도	X인자
+DSCP SC1-1_H2O2 농도	DSPC SC1-1 과수농도	X인자
+DSCP SC1-1_NH4OH 농도	DSPC SC1-1 암모니아농도	X인자
+DSCP SC1-1 Processtime	DSPC SC1-1 세정시간	X인자
+DSCP 액 Counter	DSPC Chemical 사용 횟수	X인자
+DSCP SC1-2_H2O2 농도	DSPC SC1-2 과수농도	X인자
+DSCP SC1-2_NH4OH 농도	DSPC SC1-2 암모니아농도	X인자
+DSCP SC1-2 Processtime	DSPC SC1-2 세정시간	X인자
+PCS SC1-1_H2O2 농도	PCS SC1-1 과수농도	X인자
+PCS SC1-1_NH4OH 농도	PCS SC1-1 암모니아농도	X인자
+PCS SC1-2_H2O2 농도	PCS SC1-2 과수농도	X인자
+PCS SC1-2_NH4OH 농도	PCS SC1-2 암모니아농도	X인자
+PCS SC1-1_Processtime	PCS SC1-1 세정시간	X인자
+PCS SC1-2_Processtime	PCS SC1-2 세정시간	X인자
+PCS SC1-1_Temp	PCS SC1-1 온도	X인자
+PCS SC1-2_Temp	PCS SC1-2 온도	X인자
+PCS 고온DIW_Temp	PCS 고온 DIW 온도	X인자
+PCS 액 Counter	PCS Chemical 사용 횟수	X인자
