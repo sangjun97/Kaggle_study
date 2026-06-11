@@ -1,37 +1,70 @@
+======================================================================
+# APC by lot: 6F527
+======================================================================
+🎯 target lot 조회: 6F527
+ target 6957행, USAGE 컬럼 9개, gr_out=20260610, customer=Smart_SK hynix/GF/CXMT 440
+🔎 lot 시퀀스 조회: prefixes=['6F5', '5F5']
+ 이전 lot 후보 99개 (최신순)
+ - 6F526: FDC 없음, skip
+ ✅ 6F525: 수집 (1/5, 3178행)
+ ✅ 6F524: 수집 (2/5, 5001행)
+ ✅ 6F523: 수집 (3/5, 4978행)
+ ✅ 6F522: 수집 (4/5, 4961행)
+ ✅ 6F521: 수집 (5/5, 4975행)
+ skip 통계: FDC없음=1, 필터=0, cuh없음=0, gr_out=0, customer=0, USAGE탈락=0
+ grower DF 구성: 76행, 잉곳 5개 (요청 run 5개)
 
-[3] filter_valid_data(keep_boundary=True) 후: 18행
- ※ R 통과, cuh 컷 주석, ftir_oi 0~20 컷, length 중복제거
- length   runtime_event ldp_ar fpd_ar cuh_bsw_center cuh_bsw_edge
-  390.0  824.0000000000      R      A             40           25
-  590.0 1268.0000000000      R      A             20           15
-  790.0 1703.0000000000      R      A             20           15
-  990.0 2137.0000000000      R      A             25           20
- 1190.0 2567.0000000000      R      A             25           10
- 1390.0 2995.0000000000      R      A             25           25
- 1410.0 3038.0000000000      R      A             25           25
+📊 컨텍스트: grower=TG105, prev 5/5 run (lots=['6F525', '6F524', '6F523', '6F522', '6F521']), target 6957행
+ PREV 후보 수집: 5 개 (검사 5 개, skip 0 개)
 
-[4] generate_reference_position 후 (ref_length 부여):
- ※ 각 위치 ±25 안 '가장 가까운 length' 1행에 ref_length 부여 (cuh 무관)
- length  ref_length cuh_bsw_center cuh_bsw_edge
-  390.0       390.0             40           25
-  590.0       590.0             20           15
-  790.0       790.0             20           15
-  990.0       990.0             25           20
- 1190.0      1190.0             25           10
- 1390.0      1390.0             25           25
+=== PREV 후보 (blend=5개, mode=weighted) ===
+ rank lot_number   gr_out  usage                role  비율(%)
+    1      6F525 20260531      2 blend + ps_set_prev   34.5
+    2      6F524 20260528      3               blend   23.0
+    3      6F523 20260522      4               blend   17.2
+    4      6F522 20260517      5               blend   13.8
+    5      6F521 20260511      6               blend   11.5
+ 📐 입력 X 값 vs clip 범위:
+  pull_speed_t200_delta: [-0.0014 ~ 0.0013] (clip: [-0.0070 ~ 0.0070], 밖 0/2건)
+  ftir_oi_center_delta: [nan ~ nan] (clip: [-0.8000 ~ 0.8000], 밖 0/0건)
+  dia_l50_delta: [0.3258 ~ 0.4021] (clip: [-3.0000 ~ 3.0000], 밖 0/2건)
+ 📐 입력 X 값 vs clip 범위:
+  pull_speed_t200_delta: [-0.0020 ~ 0.0029] (clip: [-0.0070 ~ 0.0070], 밖 0/10건)
+  ftir_oi_center_delta: [nan ~ nan] (clip: [-0.8000 ~ 0.8000], 밖 0/0건)
+  dia_l50_delta: [0.0709 ~ 0.5018] (clip: [-3.0000 ~ 3.0000], 밖 0/10건)
+ 📐 입력 X 값 vs clip 범위:
+  pull_speed_t200_delta: [-0.0036 ~ 0.0008] (clip: [-0.0070 ~ 0.0070], 밖 0/10건)
+  ftir_oi_center_delta: [nan ~ nan] (clip: [-0.8000 ~ 0.8000], 밖 0/0건)
+  dia_l50_delta: [0.1133 ~ 0.5475] (clip: [-3.0000 ~ 3.0000], 밖 0/10건)
+ 📐 입력 X 값 vs clip 범위:
+  pull_speed_t200_delta: [-0.0021 ~ 0.0010] (clip: [-0.0070 ~ 0.0070], 밖 0/5건)
+  ftir_oi_center_delta: [nan ~ nan] (clip: [-0.8000 ~ 0.8000], 밖 0/0건)
+  dia_l50_delta: [0.0520 ~ 0.3659] (clip: [-3.0000 ~ 3.0000], 밖 0/5건)
+ 📐 입력 X 값 vs clip 범위:
+  pull_speed_t200_delta: [-0.0015 ~ 0.0025] (clip: [-0.0070 ~ 0.0070], 밖 0/8건)
+  ftir_oi_center_delta: [nan ~ nan] (clip: [-0.8000 ~ 0.8000], 밖 0/0건)
+  dia_l50_delta: [-0.2192 ~ 0.4503] (clip: [-3.0000 ~ 3.0000], 밖 0/8건)
 
-[4-b] 위치별 매칭 분석:
- pos=390: ±25 내 1행, cuh있는행 1개, 매칭행 cuh=40
- pos=590: ±25 내 1행, cuh있는행 1개, 매칭행 cuh=20
- pos=790: ±25 내 1행, cuh있는행 1개, 매칭행 cuh=20
- pos=990: ±25 내 1행, cuh있는행 1개, 매칭행 cuh=25
- pos=1190: ±25 내 1행, cuh있는행 1개, 매칭행 cuh=25
- pos=1390: ±25 내 2행, cuh있는행 2개, 매칭행 cuh=25
+=== APC 추천 (Zero baseline, target=80.0) ===
+grower: TG105
+pres_lot: 6F527
+prev (K=5 weighted):
+ rank lot_number   gr_out  run_delta  비율(%)                role
+    1      6F525 20260531          2   34.5 blend + ps_set_prev
+    2      6F524 20260528          3   23.0               blend
+    3      6F523 20260522          4   17.2               blend
+    4      6F522 20260517          5   13.8               blend
+    5      6F521 20260511          6   11.5               blend
 
-[5] extract_at_references: 추출 10 / skip 0
- pos=390: length=390.0, center=40, edge=25
- pos=590: length=590.0, center=20, edge=15
- pos=790: length=790.0, center=20, edge=15
- pos=990: length=990.0, center=25, edge=20
- pos=1190: length=1190.0, center=25, edge=10
- pos=1390: length=1390.0, center=25, edge=25
+결과: (ps_set_pres=타겟 실측, ps_delta_pres=추천-타겟, cuh_rN=이전 run 위치별 CUH 참고)
+ position  ps_set_pres  ps_delta_pres  ps_correction_value  ps_set_proposed  cuh_r1(6F525)  cuh_r2(6F524)  cuh_r3(6F523)  cuh_r4(6F522)  cuh_r5(6F521)
+      270      0.45428       -0.45747              0.00000         -0.00320      150.00000      150.00000      150.00000      150.00000       30.00000
+      390      0.45925       -0.46325              0.00000         -0.00400      150.00000      150.00000      150.00000      150.00000      150.00000
+      590      0.46774       -0.46928              0.00000         -0.00154            NaN       70.00000      150.00000      150.00000       75.00000
+      790      0.47409       -0.47669              0.00000         -0.00260            NaN       80.00000      150.00000      150.00000      150.00000
+      990      0.47597       -0.47874              0.00000         -0.00278            NaN       80.00000      150.00000            NaN      150.00000
+     1190      0.47644       -0.47855              0.00000         -0.00211            NaN       75.00000      150.00000            NaN      105.00000
+     1390      0.47626       -0.47615              0.00000          0.00011            NaN       20.00000      150.00000            NaN       75.00000
+     1590      0.47904       -0.48192              0.00000         -0.00287            NaN       75.00000      150.00000      150.00000            NaN
+     1790      0.48034       -0.48534              0.00000         -0.00500            NaN      150.00000      150.00000            NaN            NaN
+     1990      0.48262       -0.48718              0.00000         -0.00456            NaN      140.00000      150.00000            NaN      150.00000
