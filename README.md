@@ -1,146 +1,172 @@
-"""APC 추론 핵심 (cond 제거 버전).
+============================================================
+# 전체 평가 (n=14)
+============================================================
+ MAE :  36.40
+ RMSE :  45.22
+ Bias :  -0.79 (예측-실측, +면 과대예측)
+ Corr :  0.187
 
-기여도 계산 + APC 역산 + 가중 블렌딩.
-"""
+ [BP/포화 위치] n=   1 MAE= 93.70
+ [일반 위치] n=  13 MAE= 31.99
 
-import numpy as np
-import pandas as pd
-from typing import Dict, List
+ [CUH 구간별 MAE]
+     0~50 : n=   5 MAE= 34.00
+   50~100 : n=   8 MAE= 30.74
+  100~150 : n=   1 MAE= 93.70
 
+ [위치(length)별 MAE]
+     390 : n=   1 MAE= 93.70
+    1590 : n=  13 MAE= 31.99
 
-def preprocess_clip(row: pd.Series, clip_config: dict) -> tuple[pd.Series, list[str]]:
-    """row의 각 컬럼을 [min, max] 범위로 클리핑."""
-    clipped = row.copy()
-    clipped_cols = []
-    for col, cfg in clip_config.items():
-        if col not in clipped or pd.isna(clipped[col]):
-            continue
-        if clipped[col] < cfg["min"]:
-            clipped[col] = cfg["min"]
-            clipped_cols.append(col)
-        elif clipped[col] > cfg["max"]:
-            clipped[col] = cfg["max"]
-            clipped_cols.append(col)
-    return clipped, clipped_cols
+ [장비(grower)별 MAE]
+ TG101 : n=   7 MAE= 34.97
+ TG73 : n=   7 MAE= 37.83
 
-
-def compute_slope_main_contrib(slope_main: Dict[str, float], input_row: pd.Series
-                               ) -> tuple[dict, float]:
-    """f(X) = Σ(slope × x). 기여도 dict + 합계 반환."""
-    contrib = 0.0
-    contrib_dict = {}
-    for feat, slope in slope_main.items():
-        if feat in input_row:
-            delta = slope * input_row[feat]
-            contrib += delta
-            contrib_dict[feat] = round(delta, 2)
-    return ({"Mains_Contrib": round(contrib, 2),
-             **{f"Mains_{k}": v for k, v in contrib_dict.items()}},
-            contrib)
+============================================================
+# 해석 가이드
+============================================================
+ · CUH 5단위 양자화 데이터 → MAE 한계 하한 ~12-15 수준
+ · Mid OI t200 MODEL MAE ~25.7 이 비교 기준
+ · 현재 MAE 36.4 → Mid 대비 높음, 점검 필요
+ · Bias 크면(±10↑) 계통 편향 — 변환/target 재점검
 
 
-def compute_apc_control(clipped_row: pd.Series,
-                        clip_config: dict,
-                        slope_main: Dict[str, float],
-                        x_columns: List[str],
-                        y_column: str = "cuh_bsw_all_delta",
-                        c_column: str = "cuh_bsw_all_prev",
-                        ctrl_var: str = "pull_speed_t200_delta",
-                        y_target: float = 80.0,
-                        resolution: float = 0.001) -> tuple[float, float, float, float]:
-    """APC 역산: PS grid를 스캔하여 |contrib − y_delta_target| 최소가 되는 PS.
+ ================================================================================
+# 5D245_apc_recommendation.xlsx (target=50.0, deadband=±10, cuh=mean)
+================================================================================
+   pos  cuh_now  target   need   ps_pres   ps_prop  ps_delta  verdict
+---------------------------------------------------------------------
+   390     40.0      50     유지   0.46694   0.46774   0.00080      ·중립
+   590    100.0      50     낮춤   0.48026   0.47787  -0.00239      ✅OK
+   790    110.0      50     낮춤   0.48529   0.48396  -0.00133      ✅OK
+   990     48.8      50     유지   0.49057   0.48976  -0.00081      ·중립
+  1190     63.8      50     낮춤   0.49094   0.49084  -0.00009      ⚠의심
+  1390     40.0      50     유지   0.49193   0.49371   0.00179      ·중립
+  1590     39.0      50     높임   0.49322   0.49723   0.00401      ✅OK
+  1790     37.0      50     높임   0.49379   0.49495   0.00117      ✅OK
+  1990     25.0      50     높임   0.49223   0.49501   0.00278      ✅OK
+---------------------------------------------------------------------
+ ✅ OK 5 ⚠️ 의심 1 · 중립 3 N/A 0
+ 방향 일치율(중립 제외): 5/6 = 83%
+ ⚠️ 의심 = CUH-target 방향과 ps 추천 반대거나, 조정 필요한데 ps 거의 안 움직임.
 
-    벡터화 버전: 기존 이중 for-loop를 numpy 일괄 평가로 교체.
-    """
-    y_prev = float(clipped_row[c_column])
-    y_delta_target = y_target - y_prev
-    min_v, max_v = clip_config[ctrl_var]["min"], clip_config[ctrl_var]["max"]
+================================================================================
+# 6A210_apc_recommendation.xlsx (target=50.0, deadband=±10, cuh=mean)
+================================================================================
+   pos  cuh_now  target   need   ps_pres   ps_prop  ps_delta  verdict
+---------------------------------------------------------------------
+   270    135.0      50     낮춤   0.45730   0.45186  -0.00544      ✅OK
+   790     63.8      50     낮춤   0.48105   0.48080  -0.00025      ⚠의심
+   990     66.0      50     낮춤   0.48435   0.48463   0.00028      ⚠의심
+  1190     86.2      50     낮춤   0.48754   0.48504  -0.00249      ✅OK
+  1390     63.8      50     낮춤   0.48838   0.48765  -0.00073      ✅OK
+  1590     60.0      50     유지   0.49058   0.49017  -0.00041      ·중립
+  1790    117.0      50     낮춤   0.49283   0.48955  -0.00328      ✅OK
+  1990    117.0      50     낮춤   0.49210   0.48778  -0.00432      ✅OK
+---------------------------------------------------------------------
+ ✅ OK 5 ⚠️ 의심 2 · 중립 1 N/A 0
+ 방향 일치율(중립 제외): 5/7 = 71%
+ ⚠️ 의심 = CUH-target 방향과 ps 추천 반대거나, 조정 필요한데 ps 거의 안 움직임.
 
-    # 다른 X 변수들의 기여도는 고정값
-    base_contrib = sum(slope_main.get(k, 0.0) * clipped_row[k]
-                       for k in slope_main if k != ctrl_var and k in clipped_row)
-    slope_ctrl = slope_main.get(ctrl_var, 0.0)
+================================================================================
+# 6C407_apc_recommendation.xlsx (target=50.0, deadband=±10, cuh=mean)
+================================================================================
+   pos  cuh_now  target   need   ps_pres   ps_prop  ps_delta  verdict
+---------------------------------------------------------------------
+   790     44.0      50     유지   0.47940   0.48062   0.00122      ·중립
+   990     50.0      50     유지   0.48541   0.48463  -0.00078      ·중립
+  1190    117.0      50     낮춤   0.48785   0.48310  -0.00475      ✅OK
+  1390     51.2      50     유지   0.48676   0.48784   0.00108      ·중립
+  1590     63.8      50     낮춤   0.49215   0.49140  -0.00075      ✅OK
+  1790     70.0      50     낮춤   0.49254   0.49049  -0.00204      ✅OK
+  1990     80.0      50     낮춤   0.49201   0.49120  -0.00081      ✅OK
+---------------------------------------------------------------------
+ ✅ OK 4 ⚠️ 의심 0 · 중립 3 N/A 0
+ 방향 일치율(중립 제외): 4/4 = 100%
 
-    def _search(res: float) -> tuple[float, float]:
-        grid = np.arange(min_v, max_v + res, res)
-        contribs = base_contrib + slope_ctrl * grid
-        idx = np.argmin(np.abs(contribs - y_delta_target))
-        return float(grid[idx]), float(contribs[idx])
+================================================================================
+# 6D205_apc_recommendation.xlsx (target=50.0, deadband=±10, cuh=mean)
+================================================================================
+   pos  cuh_now  target   need   ps_pres   ps_prop  ps_delta  verdict
+---------------------------------------------------------------------
+   270    150.0      50     낮춤   0.46136   0.45647  -0.00489      ✅OK
+   390    150.0      50     낮춤   0.46888   0.46374  -0.00514      ✅OK
+   790     53.8      50     유지   0.48897   0.48969   0.00073      ·중립
+   990     60.0      50     유지   0.49122   0.49169   0.00046      ·중립
+  1190     97.0      50     낮춤   0.49395   0.49192  -0.00202      ✅OK
+  1390     57.0      50     유지   0.49350   0.49343  -0.00007      ·중립
+  1590     47.0      50     유지   0.49425   0.49347  -0.00078      ·중립
+  1790     33.0      50     높임   0.49467   0.49511   0.00044      ⚠의심
+  1990     63.0      50     낮춤   0.49508   0.49325  -0.00183      ✅OK
+---------------------------------------------------------------------
+ ✅ OK 4 ⚠️ 의심 1 · 중립 4 N/A 0
+ 방향 일치율(중립 제외): 4/5 = 80%
+ ⚠️ 의심 = CUH-target 방향과 ps 추천 반대거나, 조정 필요한데 ps 거의 안 움직임.
 
-    s1_x, s1_y = _search(resolution)
-    s2_x, s2_y = _search(resolution / 10)
-    return round(s1_x, 5), round(s2_x, 5), s1_y, s2_y
+================================================================================
+# 6D209_apc_recommendation.xlsx (target=50.0, deadband=±10, cuh=mean)
+================================================================================
+   pos  cuh_now  target   need   ps_pres   ps_prop  ps_delta  verdict
+---------------------------------------------------------------------
+   590     65.0      50     낮춤   0.47969   0.48066   0.00097      ⚠의심
+   790    150.0      50     낮춤   0.48430   0.48240  -0.00191      ✅OK
+   990     85.0      50     낮춤   0.48704   0.48915   0.00211      ⚠의심
+  1190    150.0      50     낮춤   0.49102   0.48686  -0.00417      ✅OK
+  1390     70.0      50     낮춤   0.49240   0.49308   0.00068      ⚠의심
+  1590     60.0      50     유지   0.49100   0.49226   0.00125      ·중립
+  1790     40.0      50     유지   0.49207   0.49416   0.00209      ·중립
+  1990    150.0      50     낮춤   0.49273   0.48981  -0.00292      ✅OK
+---------------------------------------------------------------------
+ ✅ OK 3 ⚠️ 의심 3 · 중립 2 N/A 0
+ 방향 일치율(중립 제외): 3/6 = 50%
+ ⚠️ 의심 = CUH-target 방향과 ps 추천 반대거나, 조정 필요한데 ps 거의 안 움직임.
 
+================================================================================
+# 6F112_apc_recommendation.xlsx (target=50.0, deadband=±10, cuh=mean)
+================================================================================
+   pos  cuh_now  target   need   ps_pres   ps_prop  ps_delta  verdict
+---------------------------------------------------------------------
+   390     85.0      50     낮춤   0.45897   0.45791  -0.00105      ✅OK
+   790     76.7      50     낮춤   0.47644   0.47532  -0.00112      ✅OK
+   990     79.0      50     낮춤   0.47964   0.47791  -0.00173      ✅OK
+  1190    103.0      50     낮춤   0.48166   0.47792  -0.00373      ✅OK
+  1390     89.0      50     낮춤   0.48541   0.48118  -0.00423      ✅OK
+  1590     85.0      50     낮춤   0.48469   0.48229  -0.00240      ✅OK
+  1790     90.0      50     낮춤   0.48598   0.48296  -0.00302      ✅OK
+  1990     95.0      50     낮춤   0.48497   0.48234  -0.00263      ✅OK
+---------------------------------------------------------------------
+ ✅ OK 8 ⚠️ 의심 0 · 중립 0 N/A 0
+ 방향 일치율(중립 제외): 8/8 = 100%
 
-def compute_apc_control_zero_baseline(clipped_row: pd.Series,
-                                      clip_config: dict,
-                                      slope_main: Dict[str, float],
-                                      x_columns: List[str],
-                                      y_column: str = "cuh_bsw_all_delta",
-                                      c_column: str = "cuh_bsw_all_prev",
-                                      ctrl_var: str = "pull_speed_t200_delta",
-                                      y_target: float = 80.0,
-                                      resolution: float = 0.001
-                                      ) -> tuple[float, float, float, float]:
-    """release/dev.py 변형: 다른 X 변수를 0으로 가정한 baseline 도 함께 계산."""
-    y_prev = float(clipped_row[c_column])
-    y_delta_target = y_target - y_prev
-    min_v, max_v = clip_config[ctrl_var]["min"], clip_config[ctrl_var]["max"]
-    grid = np.arange(min_v, max_v + resolution, resolution)
-    slope_ctrl = slope_main.get(ctrl_var, 0.0)
+================================================================================
+# 6W911_apc_recommendation.xlsx (target=50.0, deadband=±10, cuh=mean)
+================================================================================
+   pos  cuh_now  target   need   ps_pres   ps_prop  ps_delta  verdict
+---------------------------------------------------------------------
+   790     38.3      50     높임   0.47876   0.48039   0.00163      ✅OK
+   990     45.0      50     유지   0.48053   0.48146   0.00093      ·중립
+  1190     53.8      50     유지   0.48175   0.48301   0.00126      ·중립
+  1390     35.0      50     높임   0.48402   0.48565   0.00163      ✅OK
+  1590     45.0      50     유지   0.48641   0.48780   0.00139      ·중립
+  1790     48.3      50     유지   0.48740   0.48905   0.00165      ·중립
+  1990     87.0      50     낮춤   0.49014   0.48736  -0.00279      ✅OK
+---------------------------------------------------------------------
+ ✅ OK 3 ⚠️ 의심 0 · 중립 4 N/A 0
+ 방향 일치율(중립 제외): 3/3 = 100%
 
-    # Prev 기반: 현재 X 값 그대로
-    base_prev = sum(slope_main.get(k, 0.0) * clipped_row[k]
-                    for k in slope_main if k != ctrl_var and k in clipped_row)
-    contribs_prev = base_prev + slope_ctrl * grid
-    idx_p = np.argmin(np.abs(contribs_prev - y_delta_target))
-
-    # Zero 기반: 다른 X = 0 가정 (base_zero = 0)
-    contribs_zero = slope_ctrl * grid
-    idx_z = np.argmin(np.abs(contribs_zero - y_delta_target))
-
-    return (round(float(grid[idx_p]), 5), round(float(grid[idx_z]), 5),
-            float(contribs_prev[idx_p]), float(contribs_zero[idx_z]))
-
-
-def get_blending_weights(n: int, base: float) -> list[float]:
-    """모델 개수별 블렌딩 가중 패턴: [1, b, b², b, 1] 등."""
-    patterns = {
-        1: [1],
-        2: [1, 1],
-        3: [1, base, 1],
-        4: [1, base, base, 1],
-        5: [1, base, base*base, base, 1],
-        6: [1, base, base*base, base*base, base, 1],
-    }
-    return patterns.get(n, [1.0] * n)
-
-
-def blend_slopes(model_indices: list[int],
-                 models: list[dict],
-                 base: float = 1.5) -> Dict[str, float]:
-    """run4_inference / dev.py 의 가중 평균 블렌딩 (cond 제거).
-
-    models 는 model_idx 키를 가진 dict 리스트. 호출처가 전체 리스트를 넘기든
-    필터링된 부분집합을 넘기든 model_idx 로 매칭.
-    """
-    weights = get_blending_weights(len(model_indices), base)
-    sum_w = sum(weights)
-
-    # model_idx → dict 로 lookup 테이블
-    by_idx = {m["model_idx"]: m for m in models if "model_idx" in m}
-
-    missing = [i for i in model_indices if i not in by_idx]
-    if missing:
-        raise KeyError(f"blend_slopes: model_idx {missing} not in models "
-                       f"(available: {sorted(by_idx.keys())})")
-
-    first = by_idx[model_indices[0]]
-    total_main = {k: 0.0 for k in first["slope_main"].keys()}
-
-    for w, idx in zip(weights, model_indices):
-        m = by_idx[idx]
-        for k, v in m["slope_main"].items():
-            total_main[k] += v * w
-
-    return {k: v / sum_w for k, v in total_main.items()}
+================================================================================
+# 6W913_apc_recommendation.xlsx (target=50.0, deadband=±10, cuh=mean)
+================================================================================
+   pos  cuh_now  target   need   ps_pres   ps_prop  ps_delta  verdict
+---------------------------------------------------------------------
+   790     50.0      50     유지   0.47704   0.47895   0.00191      ·중립
+   990     40.0      50     유지   0.48030   0.48050   0.00019      ·중립
+  1190     73.8      50     낮춤   0.48265   0.48067  -0.00199      ✅OK
+  1390     37.5      50     높임   0.48475   0.48422  -0.00053      ⚠의심
+  1590     51.2      50     유지   0.48590   0.48738   0.00149      ·중립
+  1790     31.2      50     높임   0.48955   0.49073   0.00118      ✅OK
+  1990    112.0      50     낮춤   0.48967   0.48775  -0.00192      ✅OK
+---------------------------------------------------------------------
+ ✅ OK 3 ⚠️ 의심 1 · 중립 3 N/A 0
+ 방향 일치율(중립 제외): 3/4 = 75%
+ ⚠️ 의심 = CUH-target 방향과 ps 추천 반대거나, 조정 필요한데 ps 거의 안 움직임
