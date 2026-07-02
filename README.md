@@ -1,58 +1,49 @@
-=== [B_baseline] lr=0.007 pw=7.0 model=config\model.yaml ===
---- 01_train ---
-Traceback (most recent call last):
-  File "D:\python\CUH\growing_apc_LOW\scripts\model\01_train.py", line 13, in <module>
-    import joblib
-ModuleNotFoundError: No module named 'joblib'
---- refine (GEN5) ---
-Traceback (most recent call last):
-  File "D:\python\CUH\growing_apc_LOW\scripts\model\02_refine_primary.py", line 12, in <module>
-    from src.core.config import load_config
-  File "D:\python\CUH\growing_apc_LOW\src\core\config.py", line 5, in <module>
-    import yaml
-ModuleNotFoundError: No module named 'yaml'
-Traceback (most recent call last):
-  File "D:\python\CUH\growing_apc_LOW\scripts\model\03_refine_base.py", line 9, in <module>
-    from src.core.config import load_config
-  File "D:\python\CUH\growing_apc_LOW\src\core\config.py", line 5, in <module>
-    import yaml
-ModuleNotFoundError: No module named 'yaml'
---- build_models_json ---
-??理쒖쥌 slopes.json ?앹꽦: config/models_B_baseline.json
-??saved: config/models_B_baseline.json
---- validate_cuh ---
-Traceback (most recent call last):
-  File "D:\python\CUH\growing_apc_LOW\scripts\release\validate_cuh.py", line 35, in <module>
-    from src.core.config import load_config
-  File "D:\python\CUH\growing_apc_LOW\src\core\config.py", line 5, in <module>
-    import yaml
-ModuleNotFoundError: No module named 'yaml'
 
-python : Traceback (most recent call last):
-위치 D:\python\CUH\growing_apc_LOW\compare_retrain.ps1:97 문자:9
-+         python scripts\release\eval_validation_mae.py --in $valout *> ...
-+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
-    + FullyQualifiedErrorId : NativeCommandError
- 
-  File "D:\python\CUH\growing_apc_LOW\scripts\release\eval_validation_mae.py", line 151, in <module>
-    main()
-  File "D:\python\CUH\growing_apc_LOW\scripts\release\eval_validation_mae.py", line 48, in main
-    df = pd.read_csv(args.inp)
-         ^^^^^^^^^^^^^^^^^^^^^
-  File "D:\python\virtualenv\venv_new\Lib\site-packages\pandas\io\parsers\readers.py", line 1026, in read_csv
-    return _read(filepath_or_buffer, kwds)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\python\virtualenv\venv_new\Lib\site-packages\pandas\io\parsers\readers.py", line 620, in _read
-    parser = TextFileReader(filepath_or_buffer, **kwds)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\python\virtualenv\venv_new\Lib\site-packages\pandas\io\parsers\readers.py", line 1620, in __init__
-    self._engine = self._make_engine(f, self.engine)
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\python\virtualenv\venv_new\Lib\site-packages\pandas\io\parsers\readers.py", line 1880, in _make_engine
-    self.handles = get_handle(
-                   ^^^^^^^^^^^
-  File "D:\python\virtualenv\venv_new\Lib\site-packages\pandas\io\common.py", line 873, in get_handle
-    handle = open(
-             ^^^^^
-FileNotFoundError: [Errno 2] No such file or directory: 'outputs\\retrain_compare\\val_B_baseline.csv'
+============================================================
+# ?꾩껜 ?됯? (n=246)
+============================================================
+ MAE :  37.17
+ RMSE :  49.41
+ Bias :  -9.55 (?덉륫-?ㅼ륫, +硫?怨쇰??덉륫)
+ Corr :  0.521
+
+ [BP/?ы솕 ?꾩튂] n= 106 MAE= 42.75
+ [?쇰컲 ?꾩튂] n= 140 MAE= 32.94
+
+ [CUH 援ш컙蹂?MAE]
+     0~50 : n=  59 MAE= 33.80
+   50~100 : n=  81 MAE= 32.31
+  100~150 : n= 106 MAE= 42.75
+
+============================================================
+# ?댁꽍 媛?대뱶
+============================================================
+ 쨌 CUH 5?⑥쐞 ?묒옄???곗씠????MAE ?쒓퀎 ?섑븳 ~12-15 ?섏?
+ 쨌 Mid OI t200 MODEL MAE ~25.7 ??鍮꾧탳 湲곗?
+ 쨌 ?꾩옱 MAE 37.2 ??Mid ?鍮??믪쓬, ?먭? ?꾩슂
+ 쨌 Bias ?щ㈃(짹10?? 怨꾪넻 ?명뼢 ??蹂??target ?ъ젏寃
+
+============================================================
+# ?ы솕(?ㅼ륫150) ?꾩튂 吏꾨떒 (n=106)
+============================================================
+ ?ㅼ륫 150 ?꾩튂??cuh_prev(湲곗?):
+ prev ?됯퇏: 104.33 (150 ?대㈃ delta 0 ?쇰줈 留욎땄, ??쑝硫?delta 媛 ?먰봽 ?꾩슂)
+ prev <100 鍮꾩쑉:  39.6% (?믪쓣?섎줉 delta 濡??ы솕 紐??곕씪媛?
+ ?덉륫 ?됯퇏: 107.25 (150 ??媛源뚯썙???뺤긽)
+ ?덉륫 MAE :  42.75
+
+ ?좑툘 prev<100 ?몃뜲 ?ㅼ륫 ?ы솕(150) ???꾩튂 42嫄?
+ ???꾩튂???덉륫 ?됯퇏 79.1 ??delta 紐⑤뜽??89 ?먰봽瑜?紐?留뚮뱾??怨쇱냼?덉륫
+
+============================================================
+# 怨쇰??덉륫 吏꾨떒 ???ㅼ륫 ??쓬(??0) ?꾩튂 (n=45)
+============================================================
+ ?ㅼ륫 ?됯퇏:  16.67
+ ?덉륫 ?됯퇏:  50.76 (?ㅼ륫蹂대떎 ?믪쑝硫?怨쇰??덉륫)
+ Bias : +34.10
+ MAE :  37.34
+ cuh_prev ?됯퇏:  60.91 (?믪쑝硫?delta 濡?紐??대젮??寃?
+ prev >=100 鍮꾩쑉:  17.8% (?ㅼ륫 ?????prev ?ы솕硫?湲됰씫 紐??곕씪媛?
+
+ ?좑툘 ?ㅼ륫 ??쓬(??0) & prev??00 ???꾩튂 8嫄?
+ prev ?됯퇏 125 ???ㅼ륫 18 湲됰씫?몃뜲 ?덉륫 95 (delta 媛 ?섎씫 紐??곕씪媛 怨쇰??덉륫)
