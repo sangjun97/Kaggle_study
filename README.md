@@ -20,7 +20,6 @@ D:\python\CUH\growing_apc_LOW\src\release\pipeline.py        355             row
 
 
 (venv_new) PS D:\python\CUH\growing_apc_LOW>
-(venv_new) PS D:\python\CUH\growing_apc_LOW> # validate_cuh 예측이 clip 을 쓰는지 slope 만 쓰는지
 (venv_new) PS D:\python\CUH\growing_apc_LOW> Select-String -Path scripts\release\validate_cuh.py `
 >>     -Pattern "clip|global_max_abs|slope|cuh_pred" -Context 0,1
 
