@@ -1,52 +1,48 @@
-baseline hash: CA36DD4171A0AD2A1391F1AF0185F46CEA67C87F6C5474427BE55656498E562C
-wideclip hash: CA36DD4171A0AD2A1391F1AF0185F46CEA67C87F6C5474427BE55656498E562C
-clip applied: False
+(venv_new) PS D:\python\CUH\growing_apc_LOW> Get-ChildItem -Path src\ -Filter *.py -Recurse |
+>>     Select-String -Pattern "clip_config" |
+>>     Select-Object Path, LineNumber, Line
 
-============================================================
-# ?꾩껜 ?됯? (n=246)
-============================================================
- MAE :  37.17
- RMSE :  49.41
- Bias :  -9.55 (?덉륫-?ㅼ륫, +硫?怨쇰??덉륫)
- Corr :  0.521
+Path                                                  LineNumber Line
+----                                                  ---------- ----
+D:\python\CUH\growing_apc_LOW\src\model\apc.py                11 def preprocess_clip(row: pd.Series, clip_config: dict) -> tuple[pd.Series, list[str]]:
+D:\python\CUH\growing_apc_LOW\src\model\apc.py                15     for col, cfg in clip_config.items():
+D:\python\CUH\growing_apc_LOW\src\model\apc.py                43                         clip_config: dict,
+D:\python\CUH\growing_apc_LOW\src\model\apc.py                57     min_v, max_v = clip_config[ctrl_var]["min"], clip_config[ctrl_var]["max"]
+D:\python\CUH\growing_apc_LOW\src\model\apc.py                76                                       clip_config: dict,
+D:\python\CUH\growing_apc_LOW\src\model\apc.py                88     min_v, max_v = clip_config[ctrl_var]["min"], clip_config[ctrl_var]["max"]
+D:\python\CUH\growing_apc_LOW\src\release\pipeline.py        282                             clip_config: dict,
+D:\python\CUH\growing_apc_LOW\src\release\pipeline.py        290     #     if col not in df.columns or col not in clip_config:
+D:\python\CUH\growing_apc_LOW\src\release\pipeline.py        293     #     cfg = clip_config[col]
+D:\python\CUH\growing_apc_LOW\src\release\pipeline.py        298     # if any(((pd.to_numeric(df[c], errors="coerce") < clip_config[c]["min"])
+D:\python\CUH\growing_apc_LOW\src\release\pipeline.py        299     #         | (pd.to_numeric(df[c], errors="coerce") > clip_config[c]["max"])).any()
+D:\python\CUH\growing_apc_LOW\src\release\pipeline.py        300     #        for c in x_columns if c in clip_config and c in df.columns):
+D:\python\CUH\growing_apc_LOW\src\release\pipeline.py        355             row, clip_config, avg_main, x_columns,
 
- [BP/?ы솕 ?꾩튂] n= 106 MAE= 42.75
- [?쇰컲 ?꾩튂] n= 140 MAE= 32.94
 
- [CUH 援ш컙蹂?MAE]
-     0~50 : n=  59 MAE= 33.80
-   50~100 : n=  81 MAE= 32.31
-  100~150 : n= 106 MAE= 42.75
+(venv_new) PS D:\python\CUH\growing_apc_LOW>
+(venv_new) PS D:\python\CUH\growing_apc_LOW> # 01_train 단독
+(venv_new) PS D:\python\CUH\growing_apc_LOW> Select-String -Path scripts\model\01_train.py -Pattern "clip_config|clip" -Context 0,2
+(venv_new) PS D:\python\CUH\growing_apc_LOW> 
+(venv_new) PS D:\python\CUH\growing_apc_LOW> # validate_cuh 가 clip 을 쓰는지 slope 만 쓰는지
+(venv_new) PS D:\python\CUH\growing_apc_LOW> Select-String -Path scripts\release\validate_cuh.py -Pattern "clip|global_max_abs|slope" -Context 0,1
 
-============================================================
-# ?댁꽍 媛?대뱶
-============================================================
- 쨌 CUH 5?⑥쐞 ?묒옄???곗씠????MAE ?쒓퀎 ?섑븳 ~12-15 ?섏?
- 쨌 Mid OI t200 MODEL MAE ~25.7 ??鍮꾧탳 湲곗?
- 쨌 ?꾩옱 MAE 37.2 ??Mid ?鍮??믪쓬, ?먭? ?꾩슂
- 쨌 Bias ?щ㈃(짹10?? 怨꾪넻 ?명뼢 ??蹂??target ?ъ젏寃
-
-============================================================
-# ?ы솕(?ㅼ륫150) ?꾩튂 吏꾨떒 (n=106)
-============================================================
- ?ㅼ륫 150 ?꾩튂??cuh_prev(湲곗?):
- prev ?됯퇏: 104.33 (150 ?대㈃ delta 0 ?쇰줈 留욎땄, ??쑝硫?delta 媛 ?먰봽 ?꾩슂)
- prev <100 鍮꾩쑉:  39.6% (?믪쓣?섎줉 delta 濡??ы솕 紐??곕씪媛?
- ?덉륫 ?됯퇏: 107.25 (150 ??媛源뚯썙???뺤긽)
- ?덉륫 MAE :  42.75
-
- ?좑툘 prev<100 ?몃뜲 ?ㅼ륫 ?ы솕(150) ???꾩튂 42嫄?
- ???꾩튂???덉륫 ?됯퇏 79.1 ??delta 紐⑤뜽??89 ?먰봽瑜?紐?留뚮뱾??怨쇱냼?덉륫
-
-============================================================
-# 怨쇰??덉륫 吏꾨떒 ???ㅼ륫 ??쓬(??0) ?꾩튂 (n=45)
-============================================================
- ?ㅼ륫 ?됯퇏:  16.67
- ?덉륫 ?됯퇏:  50.76 (?ㅼ륫蹂대떎 ?믪쑝硫?怨쇰??덉륫)
- Bias : +34.10
- MAE :  37.34
- cuh_prev ?됯퇏:  60.91 (?믪쑝硫?delta 濡?紐??대젮??寃?
- prev >=100 鍮꾩쑉:  17.8% (?ㅼ륫 ?????prev ?ы솕硫?湲됰씫 紐??곕씪媛?
-
- ?좑툘 ?ㅼ륫 ??쓬(??0) & prev??00 ???꾩튂 8嫄?
- prev ?됯퇏 125 ???ㅼ륫 18 湲됰씫?몃뜲 ?덉륫 95 (delta 媛 ?섎씫 紐??곕씪媛 怨쇰??덉륫)
+> scripts\release\validate_cuh.py:40:from src.model.slope_io import load_slope_config
+  scripts\release\validate_cuh.py:41:from src.preprocess.matching import extract_at_references
+> scripts\release\validate_cuh.py:89:    def _reduce(bp, do_clip):
+  scripts\release\validate_cuh.py:90:        out = {}
+> scripts\release\validate_cuh.py:98:            out[ref] = float(min(150.0, max(0.0, v))) if do_clip else float(v)
+  scripts\release\validate_cuh.py:99:        return out
+> scripts\release\validate_cuh.py:101:    # cuh_pred 는 물리범위 clip, cuh_prev 는 실측 기준이라 clip 안 함
+  scripts\release\validate_cuh.py:102:    return _reduce(by_pos, True), _reduce(by_pos_prev, False)
+> scripts\release\validate_cuh.py:106:                     clip_cfg, customer_filter, x_cols, valid_status):
+  scripts\release\validate_cuh.py:107:    """단일 lot 의 위치별 cuh_pred 산출. {ref_length: cuh_pred} 반환."""
+> scripts\release\validate_cuh.py:158:    slope_config = load_slope_config(_mj)
+  scripts\release\validate_cuh.py:159:
+> scripts\release\validate_cuh.py:173:            df_delta, slope_config,
+  scripts\release\validate_cuh.py:174:            x_columns=x_cols,
+> scripts\release\validate_cuh.py:178:            clip_config=clip_cfg,
+  scripts\release\validate_cuh.py:179:            inference_cfg=inf_cfg,
+> scripts\release\validate_cuh.py:267:    clip_cfg = dict(model_cfg.clip_config)
+  scripts\release\validate_cuh.py:268:    if os.path.exists(args.release_params):
+> scripts\release\validate_cuh.py:294:                clip_cfg, customer_filter, x_cols, valid_status)
+  scripts\release\validate_cuh.py:295:            if target_df is None or not cuh_pred_at:
