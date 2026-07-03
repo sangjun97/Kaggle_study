@@ -1,32 +1,15 @@
-============================================================
-# clip ?뚮퉬 吏???ㅼ틪
-============================================================
+n=1109
+|PS| > 0.007 (기존 clip 밖): 14 (1.3%)
+0.007 < |PS| <= 0.01 (완화 수혜): 14 (1.3%) <- 이 값들만 예측 입력이 바뀜
+|PS| > 0.01 (여전히 잘림): 0
 
-[scripts/model/01_train.py] clip 誘몄궗??
+[결론] 14건이 영향받음 -> B=C1 동일하면 validate_cuh 가 wideclip yaml 을 안 읽은 것. --model-config 전달 경로 점검.
 
-[scripts/model/02_refine_primary.py] clip 誘몄궗??
+(venv_new) PS D:\python\CUH\growing_apc_LOW> Select-String -Path scripts\release\validate_cuh.py -Pattern "model_config|model_cfg\s*=|load_config" -Context 0,1
 
-[scripts/model/03_refine_base.py] clip 誘몄궗??
-
-[scripts/model/04_build_models_json.py] clip 誘몄궗??
-
-[scripts/release/validate_cuh.py] clip ?ъ슜
- L178: clip_config=clip_cfg,
- L267: clip_cfg = dict(model_cfg.clip_config)
-
-============================================================
-# src/ ?꾩껜 clip_config 李몄“
-============================================================
- src\model\apc.py::L11: def preprocess_clip(row: pd.Series, clip_config: dict) -> tuple[pd.Series, list[str]]:
- src\model\apc.py::L15: for col, cfg in clip_config.items():
- src\model\apc.py::L43: clip_config: dict,
- src\model\apc.py::L57: min_v, max_v = clip_config[ctrl_var]["min"], clip_config[ctrl_var]["max"]
- src\model\apc.py::L76: clip_config: dict,
- src\model\apc.py::L88: min_v, max_v = clip_config[ctrl_var]["min"], clip_config[ctrl_var]["max"]
- src\release\pipeline.py::L282: clip_config: dict,
- src\release\pipeline.py::L290: #     if col not in df.columns or col not in clip_config:
- src\release\pipeline.py::L293: #     cfg = clip_config[col]
- src\release\pipeline.py::L298: # if any(((pd.to_numeric(df[c], errors="coerce") < clip_config[c]["min"])
- src\release\pipeline.py::L299: #         | (pd.to_numeric(df[c], errors="coerce") > clip_config[c]["max"])).any()
- src\release\pipeline.py::L300: #        for c in x_columns if c in clip_config and c in df.columns):
- src\release\pipeline.py::L355: row, clip_config, avg_main, x_columns,
+> scripts\release\validate_cuh.py:35:from src.core.config import load_config
+  scripts\release\validate_cuh.py:36:from src.release.params import load_release_params
+> scripts\release\validate_cuh.py:252:    paths = load_config(args.paths_config)
+> scripts\release\validate_cuh.py:253:    pcfg = load_config(args.preprocess_config)
+> scripts\release\validate_cuh.py:254:    model_cfg = load_config(args.model_config)
+  scripts\release\validate_cuh.py:255:
