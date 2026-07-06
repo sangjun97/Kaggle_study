@@ -1,4 +1,6 @@
-(venv_new) PS D:\python\CUH\growing_apc_LOW> python .\scripts\release\eval_k.py --in .\outputs\retrain_compare\val_K2_lr05.csv --name K2_lr05
-[K2_lr05] k=0.322 MAE=38.96 Bias=-14.86 nonsat_MAE=29.75 (baseline: k=0.254 MAE=37.17)
-(venv_new) PS D:\python\CUH\growing_apc_LOW> python .\scripts\release\eval_k.py --in .\outputs\retrain_compare\val_K3_bag1.csv --name K3_bag1
-[K3_bag1] k=0.254 MAE=37.17 Bias=-9.55 nonsat_MAE=32.94 (baseline: k=0.254 MAE=37.17)
+현재 전체 MAE: 37.17
+포화 oracle 분리 MAE: 18.74 (포화를 150 고정 시 상한)
+비포화 회귀 MAE: 32.94 (분류기가 완벽할 때 회귀 성능)
+
+개선 여지: 18.42 (분류기 정확도에 비례해 실현)
+분류기 필요조건: 포화 106건 / 전체 246건 (43%) 를 얼마나 정확히 잡는지
