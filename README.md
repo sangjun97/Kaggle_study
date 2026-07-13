@@ -1,36 +1,50 @@
-(venv_new) PS D:\python\CUH\growing_apc_LOW> Get-ChildItem -Path src\ -Filter *.py -Recurse |
->>     Select-String -Pattern "model_indices|mapping" |
->>     Select-Object Path, LineNumber, Line
+(venv_new) PS D:\python\CUH\growing_apc_LOW> python .\scripts\release\eval_validation_mae.py --in .\outputs\val_mapfix.csv
 
-Path                                                  LineNumber Line
-----                                                  ---------- ----
-D:\python\CUH\growing_apc_LOW\src\model\apc.py               119 def blend_slopes(model_indices: list[int],
-D:\python\CUH\growing_apc_LOW\src\model\apc.py               127     weights = get_blending_weights(len(model_indices), base)
-D:\python\CUH\growing_apc_LOW\src\model\apc.py               133     missing = [i for i in model_indices if i not in by_idx]
-D:\python\CUH\growing_apc_LOW\src\model\apc.py               138     first = by_idx[model_indices[0]]
-D:\python\CUH\growing_apc_LOW\src\model\apc.py               141     for w, idx in zip(weights, model_indices):
-D:\python\CUH\growing_apc_LOW\src\model\slope_io.py           49     추가로 release_params.csv 의 position 정보를 읽어 GEN5 의 mapping 자동 생성.
-D:\python\CUH\growing_apc_LOW\src\model\slope_io.py           74     # release_params 에서 position 읽고 GEN5 mapping 자동 생성
-D:\python\CUH\growing_apc_LOW\src\model\slope_io.py           75     auto_mapping = None
-D:\python\CUH\growing_apc_LOW\src\model\slope_io.py           79                                              build_position_to_models_mapping)
-D:\python\CUH\growing_apc_LOW\src\model\slope_io.py           82                 auto_mapping = build_position_to_models_mapping(
-D:\python\CUH\growing_apc_LOW\src\model\slope_io.py           84                 print(f"📋 release_params.csv 기반 mapping 자동 생성: "
-D:\python\CUH\growing_apc_LOW\src\model\slope_io.py           85                       f"{len(auto_mapping)} 개 position")
-D:\python\CUH\growing_apc_LOW\src\model\slope_io.py           91         # mapping 먼저, models 뒤 순서 (사용자 요청 형식)
-D:\python\CUH\growing_apc_LOW\src\model\slope_io.py           93         if gen_key == "GEN5" and auto_mapping:
-D:\python\CUH\growing_apc_LOW\src\model\slope_io.py           94             gen_dict["mapping"] = auto_mapping
-D:\python\CUH\growing_apc_LOW\src\model\slope_io.py          117 def get_model_indices(ref_length: int, gen: str, config: dict) -> list | None:
-D:\python\CUH\growing_apc_LOW\src\model\slope_io.py          118     """REF_LENGTH → 적용 모델 인덱스 리스트 (mapping 필드)."""
-D:\python\CUH\growing_apc_LOW\src\model\slope_io.py          119     return config.get(gen, {}).get("mapping", {}).get(str(ref_length))
-D:\python\CUH\growing_apc_LOW\src\release\params.py            5   - models.json 의 GEN5 mapping 자동 재구성
-D:\python\CUH\growing_apc_LOW\src\release\params.py           54 def build_position_to_models_mapping(positions: list[int],
-D:\python\CUH\growing_apc_LOW\src\release\params.py           56     """N 개 position 에 대해 인수인계서의 GEN5 규칙으로 model_idx mapping 생성.
-D:\python\CUH\growing_apc_LOW\src\release\params.py           82     mapping: dict[str, list[int]] = {}
-D:\python\CUH\growing_apc_LOW\src\release\params.py           95         mapping[str(p)] = indices
-D:\python\CUH\growing_apc_LOW\src\release\params.py           97     return mapping
-D:\python\CUH\growing_apc_LOW\src\release\pipeline.py         15 from src.model.slope_io import get_model_indices
-D:\python\CUH\growing_apc_LOW\src\release\pipeline.py        343         model_indices = get_model_indices(ref_length, pos_type, slope_config)
-D:\python\CUH\growing_apc_LOW\src\release\pipeline.py        344         print(model_indices)
-D:\python\CUH\growing_apc_LOW\src\release\pipeline.py        345         if model_indices is None:
-D:\python\CUH\growing_apc_LOW\src\release\pipeline.py        348         avg_main = blend_slopes(model_indices, slope_config[pos_type]["models"], blend_base)
+============================================================
+# 전체 평가 (n=246)
+============================================================
+ MAE :  35.79
+ RMSE :  48.24
+ Bias :  -9.16 (예측-실측, +면 과대예측)
+ Corr :  0.543
 
+ [BP/포화 위치] n= 106 MAE= 41.92
+ [일반 위치] n= 140 MAE= 31.15
+
+ [CUH 구간별 MAE]
+     0~50 : n=  59 MAE= 32.20
+   50~100 : n=  81 MAE= 30.39
+  100~150 : n= 106 MAE= 41.92
+
+============================================================
+# 해석 가이드
+============================================================
+ · CUH 5단위 양자화 데이터 → MAE 한계 하한 ~12-15 수준
+ · Mid OI t200 MODEL MAE ~25.7 이 비교 기준
+ · 현재 MAE 35.8 → Mid 대비 높음, 점검 필요
+ · Bias 크면(±10↑) 계통 편향 — 변환/target 재점검
+
+============================================================
+# 포화(실측150) 위치 진단 (n=106)
+============================================================
+ 실측 150 위치의 cuh_prev(기준):
+ prev 평균: 104.33 (150 이면 delta 0 으로 맞춤, 낮으면 delta 가 점프 필요)
+ prev <100 비율:  39.6% (높을수록 delta 로 포화 못 따라감)
+ 예측 평균: 108.08 (150 에 가까워야 정상)
+ 예측 MAE :  41.92
+
+ ⚠️ prev<100 인데 실측 포화(150) 인 위치 42건:
+ 이 위치들 예측 평균 82.0 → delta 모델이 89 점프를 못 만들어 과소예측
+
+============================================================
+# 과대예측 진단 — 실측 낮음(≤30) 위치 (n=45)
+============================================================
+ 실측 평균:  16.67
+ 예측 평균:  47.92 (실측보다 높으면 과대예측)
+ Bias : +31.25
+ MAE :  34.92
+ cuh_prev 평균:  60.91 (높으면 delta 로 못 내려온 것)
+ prev >=100 비율:  17.8% (실측 낮은데 prev 포화면 급락 못 따라감)
+
+ ⚠️ 실측 낮음(≤30) & prev≥100 인 위치 8건:
+ prev 평균 125 → 실측 18 급락인데 예측 89 (delta 가 하락 못 따라가 과대예측)
