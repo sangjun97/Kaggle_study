@@ -1,8 +1,4 @@
-[C2_pw3] k=0.229 MAE=34.87 Bias=-8.85 nonsat_MAE=29.70 (baseline: k=0.254 MAE=37.17)
-[C3_pw10] k=0.318 MAE=36.41 Bias=-9.53 nonsat_MAE=32.03 (baseline: k=0.254 MAE=37.17)
-[C4_wide_pw3] k=0.198 MAE=35.80 Bias=-9.04 nonsat_MAE=30.97 (baseline: k=0.254 MAE=37.17)
-[K1_lr02] k=0.351 MAE=36.44 Bias=-9.57 nonsat_MAE=32.38 (baseline: k=0.254 MAE=37.17)
-[K2_lr05] k=0.329 MAE=35.93 Bias=-9.23 nonsat_MAE=31.72 (baseline: k=0.254 MAE=37.17)
-[K3_bag1] k=0.333 MAE=35.88 Bias=-8.80 nonsat_MAE=32.05 (baseline: k=0.254 MAE=37.17)
-[PW150] k=0.343 MAE=37.17 Bias=-9.94 nonsat_MAE=33.08 (baseline: k=0.254 MAE=37.17)
-[PW200] k=0.357 MAE=37.68 Bias=-10.22 nonsat_MAE=33.76 (baseline: k=0.254 MAE=37.17)
+C2_pw3: ['11488', '15947', '16400', '17041', '14377', '11386', '9541', '12903']
+ HEAD(m1)=11488 TAIL(m8)=12903 비율=0.89
+B_baseline: ['16326', '21348', '21261', '19474', '16660', '13955', '12413', '16983']
+ HEAD(m1)=16326 TAIL(m8)=16983 비율=0.96
