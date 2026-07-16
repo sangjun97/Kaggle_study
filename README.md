@@ -8,22 +8,16 @@ def exists(x):
     return x is not None
 
 def open_image(path: str) -> np.ndarray:
-      x = np.array(Image.open(path))
-      if x.ndim == 2:
-          return x
-      elif x.ndim == 3:
-        # RGB image: Color region (R,G,B difference big pixel) converted to black then grayscale
-        gray = cv2.cvtColor(x, cv2.COLOR_RGB2GRAY).astype(np.int16)  # int16으로 캐스트하여 underflow 방지
-        mask = np.zeros_like(gray, dtype=np.int32)  # int32로 overflow 방지
-        for c in range(3):
-            mask += (x[:, :, c].astype(np.int16) - gray) ** 2  # int16에서 뺄셈 후 제곱
-        color_region = mask > (30 ** 2)  # R,G,B 차이 30 이상 = 색상 영역
-        gray[color_region] = 0  # Color area to black
-        return gray.astype(np.uint8)  # downstream 호환을 위해 uint8 반환
-      elif x.ndim == 4:
-          return x[:, :, 0, 0]
-      else:
-          raise Exception(f"image dimension error! the ndim is {x.ndim}") 
+    x = Image.open(path)
+    x = np.array(x)
+    if x.ndim == 2:
+        return x
+    elif x.ndim == 3:
+        return x[:, :, 0]
+    elif x.ndim == 4:
+        return x[:, :, 0, 0]
+    else:
+        raise Exception(f"image dimension error! the ndim is {x.ndim}")  
 
 class GrowingDipImageProcessor:
     def __init__(self, x_margin = 0.1, y_margin = 0.1, max_width = None):
