@@ -1,50 +1,44 @@
-(venv_new) PS D:\python\CUH\growing_apc> python .\scripts\release\eval_validation_mae.py --in .\outputs\val_mid.csv
-
-============================================================
-# 전체 평가 (n=1485)
-============================================================
- MAE :  26.41
- RMSE :  33.80
- Bias : -12.73 (예측-실측, +면 과대예측)
- Corr :  0.707
-
- [BP/포화 위치] n= 981 MAE= 27.96
- [일반 위치] n= 504 MAE= 23.38
-
- [CUH 구간별 MAE]
-     0~50 : n= 158 MAE= 28.86
-   50~100 : n= 346 MAE= 20.88
-  100~150 : n= 981 MAE= 27.96
-
-============================================================
-# 해석 가이드
-============================================================
- · CUH 5단위 양자화 데이터 → MAE 한계 하한 ~12-15 수준
- · Mid OI t200 MODEL MAE ~25.7 이 비교 기준
- · 현재 MAE 26.4 → Mid 수준 부합
- · Bias 크면(±10↑) 계통 편향 — 변환/target 재점검
-
-============================================================
-# 포화(실측150) 위치 진단 (n=981)
-============================================================
- 실측 150 위치의 cuh_prev(기준):
- prev 평균: 125.44 (150 이면 delta 0 으로 맞춤, 낮으면 delta 가 점프 필요)
- prev <100 비율:  16.7% (높을수록 delta 로 포화 못 따라감)
- 예측 평균: 122.04 (150 에 가까워야 정상)
- 예측 MAE :  27.96
-
- ⚠️ prev<100 인데 실측 포화(150) 인 위치 164건:
- 이 위치들 예측 평균 93.3 → delta 모델이 69 점프를 못 만들어 과소예측
-
-============================================================
-# 과대예측 진단 — 실측 낮음(≤30) 위치 (n=98)
-============================================================
- 실측 평균:  23.42
- 예측 평균:  52.77 (실측보다 높으면 과대예측)
- Bias : +29.35
- MAE :  30.03
- cuh_prev 평균:  60.84 (높으면 delta 로 못 내려온 것)
- prev >=100 비율:  15.3% (실측 낮은데 prev 포화면 급락 못 따라감)
-
- ⚠️ 실측 낮음(≤30) & prev≥100 인 위치 15건:
- prev 평균 125 → 실측 25 급락인데 예측 79 (delta 가 하락 못 따라가 과대예측)
+(venv_new) PS D:\python\CUH\growing_apc> & $PY scripts\model\02_refine_primary.py --set-name $name --gen GEN5
+📊 Primary slopes (x_max=±0.002):
+ GEN5_1: 11230.0745
+ GEN5_2: 11213.9501
+ GEN5_3: 10693.1535
+ GEN5_4: 10076.0096
+ GEN5_5: 10239.2442
+ GEN5_6: 10073.9414
+ GEN5_7: 9827.8364
+ GEN5_8: 9466.8945
+✅ slope JSON 저장: config/slopes\main\GEN5-pull_speed_t200_delta.json
+ 🖼️ 분석 플롯 저장: outputs\refine\plot_analysis_GEN5_pull_speed_t200_delta.png
+✅ refine primary 완료 → outputs\refine
+(venv_new) PS D:\python\CUH\growing_apc> & $PY scripts\model\03_refine_base.py --set-name $name --gen GEN5
+📊 Base slopes [ftir_oi_center_delta] (x_max=±0.5):
+  GEN5_1: 25.0514
+  GEN5_2: 30.3361
+  GEN5_3: 41.0027
+  GEN5_4: 55.4653
+  GEN5_5: 62.0755
+  GEN5_6: 60.7913
+  GEN5_7: 58.7584
+  GEN5_8: 56.4421
+✅ slope JSON 저장: config/slopes\main\GEN5-ftir_oi_center_delta.json
+📊 Base slopes [dia_l50_delta] (x_max=±0.5):
+  GEN5_1: -10.5936
+  GEN5_2: -8.8655
+  GEN5_3: -9.3270
+  GEN5_4: -7.8646
+  GEN5_5: -7.9580
+  GEN5_6: -7.7777
+  GEN5_7: -7.9051
+  GEN5_8: -7.7350
+✅ slope JSON 저장: config/slopes\main\GEN5-dia_l50_delta.json
+✅ refine base 완료 → outputs\refine
+(venv_new) PS D:\python\CUH\growing_apc> & $PY scripts\model\04_build_models_json.py --set-name $name
+📋 release_params.csv 기반 mapping 자동 생성: 10 개 position
+✅ 최종 slopes.json 생성: config/models_MID_pw25.json
+✅ saved: config/models_MID_pw25.json
+(venv_new) PS D:\python\CUH\growing_apc> 
+(venv_new) PS D:\python\CUH\growing_apc> # slope 진폭 비교
+(venv_new) PS D:\python\CUH\growing_apc> python -c "import json; d=json.load(open('config/models_$name.json',encoding='utf-8')); sl=[round(m['slope_main']['pull_speed_t200_delta']) for m in d['GEN5']['models']]; print('MID_pw25:',sl); print('진폭',max(sl)-min(sl),'peak@m',sl.index(max(sl))+1)"
+MID_pw25: [11230, 11214, 10693, 10076, 10239, 10074, 9828, 9467]
+진폭 1763 peak@m 1
