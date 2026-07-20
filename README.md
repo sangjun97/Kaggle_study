@@ -1,6 +1,41 @@
-(venv_new) PS D:\python\CUH\growing_apc> Get-ChildItem -Path src\ -Filter *.py -Recurse | Select-String -Pattern "keep_boundary"
+(venv) PS D:\python\DIP> python .\growing-dip-model\diagnose_components.py --img ".\data\02. 비정상 Case\6D534_0711_224722_0002624.jpg"
 
-src\preprocess\pipeline.py:78:    df_ingot = filter_valid_data(df_p, keep_boundary=True, dedup_col="actual_pos")
-src\preprocess\validation.py:6:def filter_valid_data(df: pd.DataFrame, keep_boundary: bool = False,
-src\preprocess\validation.py:11:        keep_boundary: True 면 fpd_ar/ldp_ar 가 "R"(boundary reject)인 행도
-src\preprocess\validation.py:26:        if keep_boundary:
+[6D534_0711_224722_0002624.jpg] components(배경 제외)=9, merge kernel=17
+ id   px_area  bbox_area          bbox(x,y,w,h)     centroid keep
+  1     44970     283232       (0, 0, 334, 848)    (80, 428) O
+  2      8454      15664    (156, 245, 178, 88)   (242, 273) x
+  4      4742      11781    (597, 375, 99, 119)   (645, 432) x
+  5      4167       9153    (702, 416, 113, 81)   (756, 453) x
+  6      5985       7384    (230, 485, 104, 71)   (279, 515) x
+  7      1960       2499     (139, 545, 49, 51)   (163, 569) x
+  3      1819       2304     (229, 365, 48, 48)   (253, 388) x
+  8      1777       2208     (231, 705, 46, 48)   (253, 727) x
+  9      1714       2115     (232, 765, 45, 47)   (254, 788) x
+
+ 픽셀수 기준 -> id 1
+ bbox면적 기준 -> id 1
+ 중앙영역 기준(현재) -> id 1
+
+ 저장: D:\python\DIP\diagnose_output\6D534_0711_224722_0002624_diag.png
+(venv) PS D:\python\DIP> python .\growing-dip-model\diagnose_components.py --img ".\data\02. 비정상 Case\6D534_0711_224722_0002624.jpg" --merge-ratio 0.01
+
+[6D534_0711_224722_0002624.jpg] components(배경 제외)=12, merge kernel=9
+ id   px_area  bbox_area          bbox(x,y,w,h)     centroid keep
+  1     22825     273840       (0, 0, 326, 840)    (66, 383) O
+  2      4455      11664    (164, 253, 162, 72)   (241, 273) x
+  6      2322       8549    (605, 383, 83, 103)   (645, 432) x
+  7      2059       6305     (710, 424, 97, 65)   (756, 453) x
+  8      3654       4840     (238, 493, 88, 55)   (278, 515) x
+ 10      1519       1925     (145, 713, 35, 55)   (162, 739) x
+  9       908       1155     (147, 553, 33, 35)   (163, 569) x
+  4       888       1122     (147, 373, 33, 34)   (163, 389) x
+  3       802       1024      (71, 373, 32, 32)    (87, 388) x
+  5       806       1024     (237, 373, 32, 32)   (253, 388) x
+ 11       772        960     (239, 713, 30, 32)   (253, 727) x
+ 12       737        899     (240, 773, 29, 31)   (254, 788) x
+
+ 픽셀수 기준 -> id 1
+ bbox면적 기준 -> id 1
+ 중앙영역 기준(현재) -> id 1
+
+ 저장: D:\python\DIP\diagnose_output\6D534_0711_224722_0002624_diag.png
