@@ -1,14 +1,10 @@
-jun@PF3SL25728402:/mnt/d/python/CUH/growing_apc$ /mnt/d/python/virtualenv/venv_new/Scripts/python.exe scripts/model/02b_slope_sweep.py --set-name new_data_t200 --no-density-weight --cov 0.99 0.97 0.95 0.90 0.85
-구역 배정: GEN5_1=HEAD GEN5_2=HEAD GEN5_3=BODY GEN5_4=BODY GEN5_5=BODY GEN5_6=BODY GEN5_7=TAIL GEN5_8=TAIL
-밀도가중: off, mode=coverage
+✅ inference 완료 → outputs\inference\GEN5
+ metrics: {'delta_clip': {'MAE': 27.238, 'R2': -0.204, 'TA@10': np.float64(30.3), 'TA@20': np.float64(51.6)}, 'delta_raw': {'MAE': 27.238, 'R2': -0.204, 'TA@10': np.float64(30.3), 'TA@20': np.float64(51.6)}, 'score_clip': {'MAE': 27.238, 'R2': -0.165, 'TA@10': np.float64(30.3), 'TA@20': np.float64(51.6)}, 'score_raw': {'MAE': 27.238, 'R2': -0.165, 'TA@10': np.float64(30.3), 'TA@20': np.float64(51.6)}}
 
-   cov     dead         1        2        3        4        5        6        7        8     HEAD     BODY     TAIL  max/min 패턴
--------------------------------------------------------------------------------------------------------------------------------
-  0.99   0.0000     11850    12721    12664    12499    12566    12328    12484    11481    12286    12514    11983    1.108 ✅ 낮>높>낮
-  0.97   0.0000     11850    12721    12664    12499    12566    12328    12484    11481    12286    12514    11983    1.108 ✅ 낮>높>낮
-  0.95   0.0000     11850    12721    12664    12499    12566    12328    12484    11481    12286    12514    11983    1.108 ✅ 낮>높>낮
-  0.90   0.0000     14183    14453    14682    14426    13796    13933    12862    11781    14318    14209    12321    1.246 ❌ 깨짐
-  0.85   0.0000     14183    14453    14682    14426    14508    14107    13838    12541    14318    14431    13190    1.171 ✅ 낮>높>낮
 
-📄 스윕 상세 저장: outputs\refine\primary_slope_sweep_GEN5.csv
- (JSON 은 쓰지 않았습니다. 값 확정 후 02_refine_primary.py 를 --coverage <선택값> 으로 한 번 더 돌리세요)
+ ✅ inference 완료 → outputs\inference\GEN5
+ metrics: {'delta_clip': {'MAE': 26.026, 'R2': -0.076, 'TA@10': np.float64(31.1), 'TA@20': np.float64(53.3)}, 'delta_raw': {'MAE': 26.026, 'R2': -0.076, 'TA@10': np.float64(31.1), 'TA@20': np.float64(53.3)}, 'score_clip': {'MAE': 26.026, 'R2': -0.04, 'TA@10': np.float64(31.1), 'TA@20': np.float64(53.3)}, 'score_raw': {'MAE': 26.026, 'R2': -0.04, 'TA@10': np.float64(31.1), 'TA@20': np.float64(53.3)}}
+
+
+ ✅ inference 완료 → outputs\inference\GEN5
+ metrics: {'delta_clip': {'MAE': 25.636, 'R2': -0.038, 'TA@10': np.float64(27.9), 'TA@20': np.float64(52.5)}, 'delta_raw': {'MAE': 25.636, 'R2': -0.038, 'TA@10': np.float64(27.9), 'TA@20': np.float64(52.5)}, 'score_clip': {'MAE': 25.636, 'R2': -0.004, 'TA@10': np.float64(27.9), 'TA@20': np.float64(52.5)}, 'score_raw': {'MAE': 25.636, 'R2': -0.004, 'TA@10': np.float64(27.9), 'TA@20': np.float64(52.5)}}
