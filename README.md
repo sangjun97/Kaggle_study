@@ -1,40 +1,69 @@
-jun@PF3SL25728402:/mnt/d/python/CUH/growing_apc$ /mnt/d/python/virtualenv/venv_new/Scripts/python.exe -c "import pstats; pstats.Stats('prof.out').sort_stats('cumtime').print_stats('src|scripts',30)"
-Mon Jul 27 17:07:19 2026    prof.out
+==============================================================================
+group      label               n  n_lot      MAE      R2   TA@10   TA@20
+------------------------------------------------------------------------------
+ALL        전체              21349   2478   21.418   0.516    34.8    57.0
+position   270mm            2211   2211   20.436   0.451    37.2    59.9
+position   390mm            2216   2216   22.550   0.484    30.1    53.2
+position   590mm            2112   2112   23.679   0.469    29.2    51.3
+position   790mm            2103   2103   22.244   0.471    32.7    56.0
+position   990mm            2115   2115   20.011   0.505    37.1    60.8
+position   1190mm           2146   2146   20.736   0.504    37.4    58.9
+position   1390mm           2100   2100   22.362   0.533    31.7    54.6
+position   1590mm           2134   2134   22.708   0.492    33.5    54.4
+position   1790mm           2010   2010   21.125   0.552    34.6    55.8
+position   1990mm           2202   2202   18.437   0.443    44.4    65.0
+|ps_delta| [0, 0.001)      14919   2355   20.543   0.535    36.5    59.2
+|ps_delta| [0.001, 0.002)   4524   1906   22.476   0.495    32.4    54.7
+|ps_delta| [0.002, 0.003)   1309    743   24.670   0.464    28.1    46.4
+|ps_delta| [0.003, ∞)        597    321   28.127   0.333    26.0    44.6
+==============================================================================
 
-         22193481 function calls (22061502 primitive calls) in 36.711 seconds
 
-   Ordered by: cumulative time
-   List reduced from 8130 to 129 due to restriction <'src|scripts'>
-   List reduced from 129 to 30 due to restriction <30>
+============================================================
+# 전체 평가 (n=21349)
+============================================================
+ MAE :  27.05
+ RMSE :  35.90
+ Bias : -12.59 (예측-실측, +면 과대예측)
+ Corr :  0.677
 
-   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-        1    0.001    0.001   36.715   36.715 scripts/release/validate_cuh.py:1(<module>)
-        1    0.127    0.127   33.621   33.621 scripts/release/validate_cuh.py:348(main)
-        2    0.019    0.010   33.406   16.703 scripts/release/validate_cuh.py:143(_predict_one_lot)
-        2    0.174    0.087   22.728   11.364 D:\python\CUH\growing_apc\src\release\lot_context.py:106(collect_lot_context)
-       14    0.001    0.000   20.413    1.458 D:\python\CUH\growing_apc\src\fetch\lot_query.py:318(fetch_lot_merged)
-       28    0.038    0.001   20.235    0.723 D:\python\CUH\growing_apc\src\fetch\lot_query.py:76(fetch_df)
-       14    0.055    0.004   13.730    0.981 D:\python\CUH\growing_apc\src\fetch\lot_query.py:163(extract_fdc_by_lot)
-        2    0.203    0.102    8.260    4.130 D:\python\CUH\growing_apc\src\preprocess\pipeline.py:78(build_grower_from_runs)
-       10    0.197    0.020    7.573    0.757 D:\python\CUH\growing_apc\src\preprocess\pipeline.py:41(process_ingot_for_grower)
-       12    0.142    0.012    6.764    0.564 D:\python\CUH\growing_apc\src\preprocess\smoothing.py:7(process_avg)
-       12    0.000    0.000    6.124    0.510 D:\python\CUH\growing_apc\src\fetch\lot_query.py:179(extract_3340)
-        1    0.000    0.000    1.763    1.763 D:\python\CUH\growing_apc\src\core\metrics.py:1(<module>)
-        2    0.055    0.027    1.762    0.881 D:\python\CUH\growing_apc\src\release\pipeline.py:20(preprocess_ingot)
-       12    0.000    0.000    1.403    0.117 D:\python\CUH\growing_apc\src\release\lot_context.py:57(_first_row_usage)
-       12    0.002    0.000    1.400    0.117 D:\python\CUH\growing_apc\src\release\lot_context.py:59(<dictcomp>)
-       32    0.107    0.003    1.122    0.035 D:\python\CUH\growing_apc\src\preprocess\smoothing.py:74(process_avg_nan)
-       10    0.000    0.000    1.109    0.111 D:\python\CUH\growing_apc\src\release\lot_context.py:81(usage_pair_ok)
-       12    0.001    0.000    0.557    0.046 D:\python\CUH\growing_apc\src\fetch\lot_query.py:300(join_fdc_3340)
-       26    0.002    0.000    0.440    0.017 D:\python\CUH\growing_apc\src\preprocess\smoothing.py:130(process_set)
-        2    0.000    0.000    0.438    0.219 D:\python\CUH\growing_apc\src\fetch\lot_query.py:113(get_lot_sequence)
-        2    0.001    0.001    0.360    0.180 D:\python\CUH\growing_apc\src\release\pipeline.py:73(find_valid_prevs)
-       12    0.006    0.000    0.354    0.029 D:\python\CUH\growing_apc\src\preprocess\matching.py:56(generate_reference_position)
-        1    0.000    0.000    0.266    0.266 D:\python\CUH\growing_apc\src\release\lot_context.py:1(<module>)
-        1    0.000    0.000    0.262    0.262 D:\python\CUH\growing_apc\src\fetch\lot_query.py:1(<module>)
-        8    0.012    0.001    0.181    0.023 D:\python\CUH\growing_apc\src\release\pipeline.py:157(build_delta_table)
-       20    0.001    0.000    0.169    0.008 D:\python\CUH\growing_apc\src\preprocess\pipeline.py:15(_apply_00_filter)
-       10    0.034    0.003    0.160    0.016 D:\python\CUH\growing_apc\src\preprocess\validation.py:6(filter_valid_data)
-       10    0.001    0.000    0.133    0.013 D:\python\CUH\growing_apc\src\preprocess\smoothing.py:116(process_avg_const)
-       10    0.002    0.000    0.117    0.012 D:\python\CUH\growing_apc\src\preprocess\smoothing.py:138(process_oi)
-        8    0.000    0.000    0.114    0.014 D:\python\CUH\growing_apc\src\core\config.py:40(load_yaml)
+ [BP/포화 위치] n=12947 MAE= 29.36
+ [일반 위치] n=8402 MAE= 23.50
+
+ [CUH 구간별 MAE]
+     0~50 : n=2027 MAE= 30.59
+   50~100 : n=6375 MAE= 21.25
+  100~150 : n=12947 MAE= 29.36
+
+============================================================
+# 해석 가이드
+============================================================
+ · CUH 5단위 양자화 데이터 → MAE 한계 하한 ~12-15 수준
+ · Mid OI t200 MODEL MAE ~25.7 이 비교 기준
+ · 현재 MAE 27.1 → Mid 수준 부합
+ · Bias 크면(±10↑) 계통 편향 — 변환/target 재점검
+
+============================================================
+# 포화(실측150) 위치 진단 (n=12947)
+============================================================
+ 실측 150 위치의 cuh_prev(기준):
+ prev 평균: 118.56 (150 이면 delta 0 으로 맞춤, 낮으면 delta 가 점프 필요)
+ prev <100 비율:  25.2% (높을수록 delta 로 포화 못 따라감)
+ 예측 평균: 120.64 (150 에 가까워야 정상)
+ 예측 MAE :  29.36
+
+ ⚠️ prev<100 인데 실측 포화(150) 인 위치 3264건:
+ 이 위치들 예측 평균 88.1 → delta 모델이 74 점프를 못 만들어 과소예측
+
+============================================================
+# 과대예측 진단 — 실측 낮음(≤30) 위치 (n=1310)
+============================================================
+ 실측 평균:  18.35
+ 예측 평균:  49.75 (실측보다 높으면 과대예측)
+ Bias : +31.39
+ MAE :  33.52
+ cuh_prev 평균:  55.22 (높으면 delta 로 못 내려온 것)
+ prev >=100 비율:  11.8% (실측 낮은데 prev 포화면 급락 못 따라감)
+
+ ⚠️ 실측 낮음(≤30) & prev≥100 인 위치 155건:
+ prev 평균 124 → 실측 20 급락인데 예측 99 (delta 가 하락 못 따라가 과대예측)
